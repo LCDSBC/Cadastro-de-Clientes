@@ -71,7 +71,7 @@ export const systemModules: SystemModule[] = [
     description: "Pedidos e produção de lentes",
     href: "/laboratorio",
     icon: "FlaskConical",
-    status: "beta",
+    status: "active",
     category: "gestao",
   },
   {

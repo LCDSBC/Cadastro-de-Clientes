@@ -118,6 +118,26 @@ export interface FinancialSummary {
   pagoMes: number;
 }
 
+export interface ServiceOrder {
+  id: string;
+  sale_id?: string;
+  client_name?: string;
+  sale_total?: number;
+  status: "aberta" | "producao" | "pronta" | "entregue";
+  lab_name: string;
+  expected_date?: string;
+  notes?: string;
+  created_at: string;
+}
+
+export interface LabSummary {
+  abertas: number;
+  emProducao: number;
+  prontas: number;
+  entregues: number;
+  atrasadas: number;
+}
+
 export interface DashboardStats {
   totalClients: number;
   monthlySales: number;
@@ -334,5 +354,39 @@ export const demoFinancialAccounts: FinancialAccount[] = [
     status: "pago",
     payment_method: "Cartão de crédito",
     created_at: "2025-06-20T14:00:00Z",
+  },
+];
+
+export const demoServiceOrders: ServiceOrder[] = [
+  {
+    id: "so1",
+    sale_id: "1",
+    client_name: "Maria Silva Santos",
+    sale_total: 1489.0,
+    status: "producao",
+    lab_name: "Essilor Lab",
+    expected_date: "2025-06-28",
+    notes: "Lente Varilux 1.67 — tratamento antirreflexo",
+    created_at: "2025-06-20T11:00:00Z",
+  },
+  {
+    id: "so2",
+    sale_id: "2",
+    client_name: "João Pedro Oliveira",
+    sale_total: 750.0,
+    status: "aberta",
+    lab_name: "Laboratório próprio",
+    expected_date: "2025-07-02",
+    notes: "Armação + lente básica CR-39",
+    created_at: "2025-06-22T15:00:00Z",
+  },
+  {
+    id: "so3",
+    client_name: "Ana Carolina Mendes",
+    status: "pronta",
+    lab_name: "Hoya Optical",
+    expected_date: "2025-06-18",
+    notes: "Lentes de contato mensais — reposição",
+    created_at: "2025-06-10T09:00:00Z",
   },
 ];
