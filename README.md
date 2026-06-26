@@ -65,14 +65,14 @@ Acesse [http://localhost:3000](http://localhost:3000)
 | Modo TV/Monitor fullscreen | ✅ Ativo |
 | Distâncias 2m, 3m, 4m, 6m | ✅ Ativo |
 
-### Prontuários optométricos
+### Prontuários optométricos (com impressão A4)
 | Documento | Status |
 |---|---|
-| Receita de Óculos e Lentes | ✅ Ativo |
-| Ficha Clínica | ✅ Ativo |
-| Laudo de Acuidade Visual | ✅ Ativo |
-| Declaração de Comparecimento | ✅ Ativo |
-| Guia de Encaminhamento | ✅ Ativo |
+| Receita de Óculos e Lentes | ✅ Formulário + impressão |
+| Ficha Clínica | ✅ Formulário + impressão |
+| Laudo de Acuidade Visual | ✅ Formulário + impressão |
+| Declaração de Comparecimento | ✅ Formulário + impressão |
+| Guia de Encaminhamento | ✅ Formulário + impressão |
 
 ## Estrutura do projeto
 
