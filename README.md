@@ -68,11 +68,21 @@ Acesse [http://localhost:3000](http://localhost:3000)
 ### Prontuários optométricos (com impressão A4)
 | Documento | Status |
 |---|---|
-| Receita de Óculos e Lentes | ✅ Formulário + impressão |
-| Ficha Clínica | ✅ Formulário + impressão |
-| Laudo de Acuidade Visual | ✅ Formulário + impressão |
-| Declaração de Comparecimento | ✅ Formulário + impressão |
-| Guia de Encaminhamento | ✅ Formulário + impressão |
+| Receita de Óculos e Lentes | ✅ Formulário + impressão + PDF |
+| Ficha Clínica | ✅ Formulário + impressão + PDF |
+| Laudo de Acuidade Visual | ✅ Formulário + impressão + PDF |
+| Declaração de Comparecimento | ✅ Formulário + impressão + PDF |
+| Guia de Encaminhamento | ✅ Formulário + impressão + PDF |
+
+### Persistência e backup
+| Recurso | Status |
+|---|---|
+| Salvar no Supabase (nuvem) | ✅ Quando configurado |
+| Armazenamento local (offline) | ✅ localStorage automático |
+| Exportar PDF individual | ✅ |
+| Backup para pendrive | ✅ File System API (Chrome/Edge) |
+| Backup ZIP (JSON + PDFs) | ✅ Fallback para outros navegadores |
+| Restaurar do pendrive | ✅ JSON ou ZIP |
 
 ## Estrutura do projeto
 
