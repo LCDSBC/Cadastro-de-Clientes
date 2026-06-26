@@ -37,6 +37,13 @@ npm run dev
 
 Acesse [http://localhost:3000](http://localhost:3000)
 
+### Configurar Supabase (opcional)
+```bash
+cp .env.example .env.local
+# Preencha NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY
+# Execute as migrations em supabase/migrations/
+```
+
 ## Funcionalidades SavWin mapeadas
 
 | Módulo SavWin | Status OptiCare |
