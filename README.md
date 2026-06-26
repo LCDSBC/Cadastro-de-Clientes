@@ -37,11 +37,17 @@ npm run dev
 
 Acesse [http://localhost:3000](http://localhost:3000)
 
-### Configurar Supabase (opcional)
+### Configurar Supabase
+Guia completo: [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md)
+
 ```bash
+# 1. Crie projeto em supabase.com/dashboard
+# 2. Execute supabase/setup-completo.sql no SQL Editor
+# 3. Configure .env.local:
 cp .env.example .env.local
 # Preencha NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY
-# Execute as migrations em supabase/migrations/
+# 4. Reinicie e teste em Configurações → Testar conexão
+npm run dev
 ```
 
 ## Funcionalidades SavWin mapeadas

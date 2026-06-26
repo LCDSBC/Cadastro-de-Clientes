@@ -1,6 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
+import { DEFAULT_STORE_ID, isSupabaseConfigured } from "@/lib/supabase/config";
 import type { StoredClinicalDocument } from "./prontuarios-types";
 import { demoClinicalRecords } from "./acuidade-visual-pro";
 import { createDefaultFormData } from "./document-form";
@@ -16,11 +17,8 @@ function ensureUuid(id: string): string {
   return isValidUuid(id) ? id : crypto.randomUUID();
 }
 
-function isSupabaseConfigured(): boolean {
-  return !!(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
+function isSupabaseConfiguredLocal(): boolean {
+  return isSupabaseConfigured();
 }
 
 function loadFromLocalStorage(): StoredClinicalDocument[] {
@@ -76,7 +74,7 @@ export async function loadDocuments(): Promise<{
   documents: StoredClinicalDocument[];
   source: "supabase" | "local";
 }> {
-  if (isSupabaseConfigured()) {
+  if (isSupabaseConfiguredLocal()) {
     const supabase = createClient();
     if (supabase) {
       const { data, error } = await supabase
@@ -109,11 +107,12 @@ export async function saveDocument(
   }
   saveToLocalStorage(updated);
 
-  if (isSupabaseConfigured()) {
+  if (isSupabaseConfiguredLocal()) {
     const supabase = createClient();
     if (supabase) {
       const row = {
         id: normalized.id,
+        store_id: DEFAULT_STORE_ID,
         document_type: normalized.document_type,
         exam_date: normalized.exam_date,
         optometrist: normalized.optometrist,
@@ -142,7 +141,7 @@ export async function deleteDocument(id: string): Promise<void> {
   const localDocs = loadFromLocalStorage().filter((d) => d.id !== id);
   saveToLocalStorage(localDocs);
 
-  if (isSupabaseConfigured()) {
+  if (isSupabaseConfiguredLocal()) {
     const supabase = createClient();
     if (supabase) {
       await supabase.from("clinical_documents").delete().eq("id", id);
@@ -156,11 +155,12 @@ export async function restoreDocuments(
   const normalized = documents.map((d) => ({ ...d, id: ensureUuid(d.id) }));
   saveToLocalStorage(normalized);
 
-  if (isSupabaseConfigured()) {
+  if (isSupabaseConfiguredLocal()) {
     const supabase = createClient();
     if (supabase) {
       const rows = normalized.map((doc) => ({
         id: doc.id,
+        store_id: DEFAULT_STORE_ID,
         document_type: doc.document_type,
         exam_date: doc.exam_date,
         optometrist: doc.optometrist,
@@ -181,7 +181,7 @@ export async function restoreDocuments(
 }
 
 export function getStorageStatus(): "supabase" | "local" | "offline" {
-  if (isSupabaseConfigured()) return "supabase";
+  if (isSupabaseConfiguredLocal()) return "supabase";
   if (typeof window !== "undefined" && localStorage.getItem(LOCAL_STORAGE_KEY)) {
     return "local";
   }

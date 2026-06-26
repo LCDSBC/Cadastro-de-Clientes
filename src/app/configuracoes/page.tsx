@@ -1,24 +1,15 @@
 import { AppShell } from "@/components/layout/sidebar";
 import { PageHeader } from "@/components/layout/page-header";
-import { ModulePlaceholder } from "@/components/layout/module-placeholder";
+import { SupabaseSetupPanel } from "@/components/configuracoes/supabase-setup-panel";
 
 export default function ConfiguracoesPage() {
   return (
     <AppShell>
       <PageHeader
         title="Configurações"
-        description="Usuários, loja, permissões e integrações"
+        description="Banco de dados, integrações e preferências do sistema"
       />
-      <ModulePlaceholder
-        features={[
-          "Usuários, senhas e grupos de permissão",
-          "Dados da loja e CNPJ",
-          "Exceções de horários e IPs de acesso",
-          "Integração WhatsApp",
-          "Integração e-commerce",
-          "Integração Boa Vista / Serasa",
-        ]}
-      />
+      <SupabaseSetupPanel />
     </AppShell>
   );
 }

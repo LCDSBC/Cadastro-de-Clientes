@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:setup": "cat supabase/setup-completo.sql",
+    "db:push": "npx supabase db push",
+    "db:reset": "npx supabase db reset",
+    "db:seed": "npx supabase db seed"
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.1",

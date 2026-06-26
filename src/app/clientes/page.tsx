@@ -1,21 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppShell } from "@/components/layout/sidebar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input, Textarea } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { demoClients, demoPrescriptions, type Client } from "@/lib/types";
+import type { Client, Prescription } from "@/lib/types";
+import { loadClients, saveClient, loadPrescriptions } from "@/lib/clients-store";
+import { getStorageStatus } from "@/lib/prontuarios-store";
 import { formatCpfCnpj, formatPhone, formatDate } from "@/lib/utils";
-import { Plus, Search, User, FileText, X } from "lucide-react";
+import { Plus, Search, User, FileText, X, Loader2 } from "lucide-react";
 
 export default function ClientesPage() {
-  const [clients, setClients] = useState<Client[]>(demoClients);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [search, setSearch] = useState("");
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
     name: "",
     cpf: "",
@@ -28,6 +33,14 @@ export default function ClientesPage() {
     notes: "",
   });
 
+  useEffect(() => {
+    loadClients().then(({ clients: data }) => {
+      setClients(data);
+      setLoading(false);
+    });
+    loadPrescriptions().then(setPrescriptions);
+  }, []);
+
   const filtered = clients.filter(
     (c) =>
       c.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -35,18 +48,21 @@ export default function ClientesPage() {
   );
 
   const clientPrescriptions = selectedClient
-    ? demoPrescriptions.filter((p) => p.client_id === selectedClient.id)
+    ? prescriptions.filter((p) => p.client_id === selectedClient.id)
     : [];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const storageLabel =
+    getStorageStatus() === "supabase" ? "Nuvem Supabase" : "Local";
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newClient: Client = {
-      id: Date.now().toString(),
+    setSaving(true);
+    const { client } = await saveClient({
+      id: crypto.randomUUID(),
       ...form,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    };
-    setClients([newClient, ...clients]);
+      cpf: form.cpf.replace(/\D/g, ""),
+    });
+    setClients((prev) => [client, ...prev]);
     setForm({
       name: "",
       cpf: "",
@@ -59,13 +75,14 @@ export default function ClientesPage() {
       notes: "",
     });
     setShowForm(false);
+    setSaving(false);
   };
 
   return (
     <AppShell>
       <PageHeader
         title="Clientes"
-        description="Cadastro de clientes, histórico de compras e receitas oftálmicas"
+        description={`Cadastro de clientes, histórico e receitas oftálmicas — ${storageLabel}`}
         actions={
           <Button onClick={() => setShowForm(true)}>
             <Plus className="h-4 w-4" />
@@ -144,7 +161,10 @@ export default function ClientesPage() {
                 onChange={(e) => setForm({ ...form, notes: e.target.value })}
               />
               <div className="flex gap-2 sm:col-span-2">
-                <Button type="submit">Salvar cliente</Button>
+                <Button type="submit" disabled={saving}>
+                  {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+                  Salvar ({storageLabel})
+                </Button>
                 <Button type="button" variant="outline" onClick={() => setShowForm(false)}>
                   Cancelar
                 </Button>
@@ -158,33 +178,40 @@ export default function ClientesPage() {
         <div className="lg:col-span-1">
           <Card>
             <CardHeader>
-              <CardTitle>Lista de clientes ({filtered.length})</CardTitle>
+              <CardTitle>Lista de clientes ({loading ? "..." : filtered.length})</CardTitle>
             </CardHeader>
             <CardContent className="max-h-[600px] space-y-2 overflow-y-auto p-2">
-              {filtered.map((client) => (
-                <button
-                  key={client.id}
-                  type="button"
-                  onClick={() => setSelectedClient(client)}
-                  className={`w-full rounded-lg border p-3 text-left transition-colors ${
-                    selectedClient?.id === client.id
-                      ? "border-primary-300 bg-primary-50"
-                      : "border-slate-100 hover:bg-slate-50"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100">
-                      <User className="h-5 w-5 text-slate-500" />
+              {loading ? (
+                <div className="flex items-center justify-center py-8 text-slate-500">
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Carregando...
+                </div>
+              ) : (
+                filtered.map((client) => (
+                  <button
+                    key={client.id}
+                    type="button"
+                    onClick={() => setSelectedClient(client)}
+                    className={`w-full rounded-lg border p-3 text-left transition-colors ${
+                      selectedClient?.id === client.id
+                        ? "border-primary-300 bg-primary-50"
+                        : "border-slate-100 hover:bg-slate-50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100">
+                        <User className="h-5 w-5 text-slate-500" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-slate-900">{client.name}</p>
+                        <p className="text-xs text-slate-500">
+                          {formatCpfCnpj(client.cpf)}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium text-slate-900">{client.name}</p>
-                      <p className="text-xs text-slate-500">
-                        {formatCpfCnpj(client.cpf)}
-                      </p>
-                    </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                ))
+              )}
             </CardContent>
           </Card>
         </div>
@@ -205,9 +232,7 @@ export default function ClientesPage() {
                     <div>
                       <dt className="text-xs text-slate-500">Telefone</dt>
                       <dd className="font-medium">
-                        {selectedClient.phone
-                          ? formatPhone(selectedClient.phone)
-                          : "—"}
+                        {selectedClient.phone ? formatPhone(selectedClient.phone) : "—"}
                       </dd>
                     </div>
                     <div>
@@ -224,9 +249,7 @@ export default function ClientesPage() {
                     </div>
                     <div>
                       <dt className="text-xs text-slate-500">Cadastrado em</dt>
-                      <dd className="font-medium">
-                        {formatDate(selectedClient.created_at)}
-                      </dd>
+                      <dd className="font-medium">{formatDate(selectedClient.created_at)}</dd>
                     </div>
                   </dl>
                 </CardContent>
@@ -253,25 +276,33 @@ export default function ClientesPage() {
                           <p className="font-medium">
                             Exame: {formatDate(rx.exam_date)}
                           </p>
-                          <Badge variant="success">
-                            Válida até {formatDate(rx.valid_until!)}
-                          </Badge>
+                          {rx.valid_until && (
+                            <Badge variant="success">
+                              Válida até {formatDate(rx.valid_until)}
+                            </Badge>
+                          )}
                         </div>
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           <div>
                             <p className="mb-1 font-medium text-slate-700">OD</p>
-                            <p>Esf: {rx.od_esf} | Cil: {rx.od_cil} | Eixo: {rx.od_eixo}°</p>
+                            <p>
+                              Esf: {rx.od_esf} | Cil: {rx.od_cil} | Eixo: {rx.od_eixo}°
+                            </p>
                             <p>Adição: {rx.od_add}</p>
                           </div>
                           <div>
                             <p className="mb-1 font-medium text-slate-700">OE</p>
-                            <p>Esf: {rx.oe_esf} | Cil: {rx.oe_cil} | Eixo: {rx.oe_eixo}°</p>
+                            <p>
+                              Esf: {rx.oe_esf} | Cil: {rx.oe_cil} | Eixo: {rx.oe_eixo}°
+                            </p>
                             <p>Adição: {rx.oe_add}</p>
                           </div>
                         </div>
-                        <p className="mt-2 text-xs text-slate-500">
-                          DP: {rx.dp}mm — {rx.optometrist}
-                        </p>
+                        {rx.dp && (
+                          <p className="mt-2 text-xs text-slate-500">
+                            DP: {rx.dp}mm — {rx.optometrist}
+                          </p>
+                        )}
                       </div>
                     ))
                   ) : (
