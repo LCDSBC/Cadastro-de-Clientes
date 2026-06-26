@@ -704,7 +704,13 @@ export default function ClinicaPage() {
                           </Button>
                         </>
                       )}
-                    <Link href="/acuidade-visual">
+                    <Link
+                      href={
+                        selected.client_id
+                          ? `/acuidade-visual?client_id=${selected.client_id}`
+                          : "/acuidade-visual"
+                      }
+                    >
                       <Button variant="outline">
                         <Eye className="h-4 w-4" />
                         Acuidade Visual
