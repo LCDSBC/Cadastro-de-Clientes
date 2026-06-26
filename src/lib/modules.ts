@@ -44,7 +44,7 @@ export const systemModules: SystemModule[] = [
     description: "Consultas e optometria",
     href: "/clinica",
     icon: "Calendar",
-    status: "beta",
+    status: "active",
     category: "clinica",
   },
   {

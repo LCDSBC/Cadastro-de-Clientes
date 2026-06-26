@@ -138,6 +138,28 @@ export interface LabSummary {
   atrasadas: number;
 }
 
+export interface Appointment {
+  id: string;
+  client_id: string;
+  client_name: string;
+  professional_id?: string;
+  professional_name?: string;
+  appointment_type?: string;
+  scheduled_at: string;
+  duration_minutes: number;
+  status: "agendado" | "confirmado" | "realizado" | "cancelado";
+  notes?: string;
+  created_at: string;
+}
+
+export interface ClinicSummary {
+  hoje: number;
+  agendados: number;
+  confirmados: number;
+  realizados: number;
+  cancelados: number;
+}
+
 export interface DashboardStats {
   totalClients: number;
   monthlySales: number;
@@ -388,5 +410,58 @@ export const demoServiceOrders: ServiceOrder[] = [
     expected_date: "2025-06-18",
     notes: "Lentes de contato mensais — reposição",
     created_at: "2025-06-10T09:00:00Z",
+  },
+];
+
+export const demoAppointments: Appointment[] = [
+  {
+    id: "ap1",
+    client_id: "1",
+    client_name: "Maria Silva Santos",
+    professional_id: "u1",
+    professional_name: "Dr. Ricardo Alves",
+    appointment_type: "Consulta optométrica",
+    scheduled_at: "2025-06-26T09:00:00Z",
+    duration_minutes: 30,
+    status: "confirmado",
+    notes: "Retorno — verificar adaptação das lentes",
+    created_at: "2025-06-20T10:00:00Z",
+  },
+  {
+    id: "ap2",
+    client_id: "2",
+    client_name: "João Pedro Oliveira",
+    professional_id: "u2",
+    professional_name: "Dra. Fernanda Costa",
+    appointment_type: "Exame de acuidade visual",
+    scheduled_at: "2025-06-26T14:30:00Z",
+    duration_minutes: 45,
+    status: "agendado",
+    created_at: "2025-06-22T11:00:00Z",
+  },
+  {
+    id: "ap3",
+    client_id: "3",
+    client_name: "Ana Carolina Mendes",
+    professional_id: "u1",
+    professional_name: "Dr. Ricardo Alves",
+    appointment_type: "Adaptação de lente de contato",
+    scheduled_at: "2025-06-27T10:00:00Z",
+    duration_minutes: 60,
+    status: "agendado",
+    notes: "Primeira adaptação — trazer lentes atuais",
+    created_at: "2025-06-24T09:00:00Z",
+  },
+  {
+    id: "ap4",
+    client_id: "1",
+    client_name: "Maria Silva Santos",
+    professional_id: "u2",
+    professional_name: "Dra. Fernanda Costa",
+    appointment_type: "Consulta optométrica",
+    scheduled_at: "2025-06-24T16:00:00Z",
+    duration_minutes: 30,
+    status: "realizado",
+    created_at: "2025-06-18T08:00:00Z",
   },
 ];

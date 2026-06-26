@@ -18,6 +18,20 @@ export function formatDate(date: string | Date): string {
   );
 }
 
+export function formatTime(date: string | Date): string {
+  return new Intl.DateTimeFormat("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(typeof date === "string" ? new Date(date) : date);
+}
+
+export function formatDateTime(date: string | Date): string {
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(typeof date === "string" ? new Date(date) : date);
+}
+
 export function formatCpfCnpj(value: string): string {
   const digits = value.replace(/\D/g, "");
   if (digits.length === 11) {
