@@ -14,6 +14,11 @@ export const LOCAL_STORAGE_KEYS = [
   "opticare_clinical_documents",
   "opticare_store_settings",
   "opticare_preferences",
+  "opticare_product_meta",
+  "opticare_price_tables",
+  "opticare_purchase_orders",
+  "opticare_stock_transfers",
+  "opticare_inventory_counts",
 ] as const;
 
 export const APP_VERSION = "0.1.0";

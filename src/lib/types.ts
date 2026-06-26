@@ -57,8 +57,91 @@ export interface Product {
   stock_quantity: number;
   min_stock: number;
   active: boolean;
+  barcode?: string;
+  image_url?: string;
+  price_table_id?: string;
+  contact_lens?: ContactLensSpec;
   created_at?: string;
   updated_at?: string;
+}
+
+export interface ContactLensSpec {
+  curva_base?: number;
+  diametro?: number;
+  material?: string;
+  descarte?: "diario" | "quinzenal" | "mensal" | "anual";
+  esf?: number;
+  cil?: number;
+  eixo?: number;
+}
+
+export interface PriceTable {
+  id: string;
+  name: string;
+  description?: string;
+  discount_percent: number;
+  active: boolean;
+  created_at: string;
+}
+
+export interface PurchaseOrderItem {
+  id: string;
+  product_id?: string;
+  description: string;
+  quantity: number;
+  unit_cost: number;
+  total: number;
+}
+
+export interface PurchaseOrder {
+  id: string;
+  supplier_name: string;
+  status: "rascunho" | "enviado" | "recebido" | "cancelado";
+  items: PurchaseOrderItem[];
+  total: number;
+  notes?: string;
+  expected_date?: string;
+  created_at: string;
+}
+
+export interface StockTransferItem {
+  id: string;
+  product_id: string;
+  product_name: string;
+  sku: string;
+  quantity: number;
+}
+
+export interface StockTransfer {
+  id: string;
+  from_store_id: string;
+  from_store_name: string;
+  to_store_id: string;
+  to_store_name: string;
+  status: "pendente" | "em_transito" | "concluida" | "cancelada";
+  items: StockTransferItem[];
+  notes?: string;
+  created_at: string;
+}
+
+export interface InventoryCountItem {
+  id: string;
+  product_id: string;
+  product_name: string;
+  sku: string;
+  barcode?: string;
+  system_quantity: number;
+  counted_quantity: number;
+  difference: number;
+}
+
+export interface InventoryCount {
+  id: string;
+  name: string;
+  status: "em_andamento" | "finalizado" | "cancelado";
+  items: InventoryCountItem[];
+  created_at: string;
+  finished_at?: string;
 }
 
 export interface LensGridEntry {

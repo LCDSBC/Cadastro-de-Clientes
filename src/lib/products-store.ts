@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_STORE_ID } from "@/lib/supabase/config";
 import type { Product, LensGridEntry } from "@/lib/types";
 import { demoProducts } from "@/lib/types";
+import { mergeProductMeta, saveProductMeta } from "@/lib/product-meta-store";
 
 const LOCAL_KEY = "opticare_products";
 const GRID_KEY = "opticare_lens_grid";
@@ -59,13 +60,13 @@ export async function loadProducts(): Promise<{
         .order("name");
 
       if (!error && data) {
-        const products = data.map(mapProduct);
+        const products = mergeProductMeta(data.map(mapProduct));
         saveLocal(products);
         return { products, source: "supabase" };
       }
     }
   }
-  return { products: loadLocal(), source: "local" };
+  return { products: mergeProductMeta(loadLocal()), source: "local" };
 }
 
 export async function saveProduct(
@@ -90,6 +91,13 @@ export async function saveProduct(
   if (idx >= 0) updated[idx] = full;
   else updated.unshift(full);
   saveLocal(updated);
+
+  saveProductMeta(full.id, {
+    barcode: full.barcode,
+    image_url: full.image_url,
+    price_table_id: full.price_table_id,
+    contact_lens: full.contact_lens,
+  });
 
   if (isSupabaseConfigured()) {
     const supabase = createClient();
