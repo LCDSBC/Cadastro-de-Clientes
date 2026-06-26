@@ -29,8 +29,8 @@ export default function HomePage() {
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-slate-300">
             Unifique a gestão da sua ótica — estoque, vendas, financeiro, laboratório
-            e clínica — com testes de visão digitais calibrados (Snellen, Ishihara,
-            ETDRS) inspirados nas melhores soluções do mercado.
+            e clínica — com o <strong>Acuidade Visual Pró</strong> da JL Soluções Digitais:
+            testes de visão digitais e prontuários optométricos integrados.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Link href="/dashboard">
@@ -55,8 +55,8 @@ export default function HomePage() {
           {[
             {
               icon: Eye,
-              title: "Acuidade Visual",
-              desc: "Optótipos digitais HD com Snellen, Ishihara e ETDRS",
+              title: "Acuidade Visual Pró",
+              desc: "Testes de visão + laudos, receitas e fichas clínicas",
             },
             {
               icon: ShoppingCart,

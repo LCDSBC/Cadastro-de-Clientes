@@ -31,8 +31,8 @@ export const systemModules: SystemModule[] = [
   },
   {
     id: "acuidade-visual",
-    name: "Acuidade Visual",
-    description: "Testes digitais Snellen, Ishihara e ETDRS",
+    name: "Acuidade Visual Pró",
+    description: "Testes de visão + prontuários optométricos (JL Soluções Digitais)",
     href: "/acuidade-visual",
     icon: "Eye",
     status: "active",

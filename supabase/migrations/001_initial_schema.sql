@@ -1,5 +1,5 @@
 -- OptiCare ERP - Schema completo para óticas
--- Inspirado em SavWin WEB + JL Soluções Digitais (Acuidade Visual)
+-- Inspirado em SavWin WEB + Acuidade Visual Pró (JL Soluções Digitais)
 
 -- Extensões
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -69,7 +69,7 @@ CREATE TABLE prescriptions (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Exames de acuidade visual (JL Soluções Digitais)
+-- Exames de acuidade visual (Acuidade Visual Pró)
 CREATE TABLE acuity_exams (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   client_id UUID REFERENCES clients(id),

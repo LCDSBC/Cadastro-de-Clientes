@@ -24,9 +24,21 @@ import {
   ChevronRight,
   Eye,
   Save,
+  FileText,
+  ClipboardList,
+  Plus,
 } from "lucide-react";
+import {
+  documentTemplates,
+  demoClinicalRecords,
+  ACUIDADE_VISUAL_PRO,
+} from "@/lib/acuidade-visual-pro";
+import { formatDate } from "@/lib/utils";
+
+type Tab = "testes" | "prontuarios";
 
 export default function AcuidadeVisualPage() {
+  const [activeTab, setActiveTab] = useState<Tab>("testes");
   const [selectedTest, setSelectedTest] = useState<AcuityTestType>("snellen");
   const [distance, setDistance] = useState<TestDistance>(3);
   const [currentRow, setCurrentRow] = useState(2);
@@ -183,16 +195,114 @@ export default function AcuidadeVisualPage() {
   return (
     <AppShell>
       <PageHeader
-        title="Acuidade Visual Digital"
-        description="Sistema de testes de visão com optótipos calibrados — Snellen, Ishihara, ETDRS e mais"
+        title={ACUIDADE_VISUAL_PRO.name}
+        description={`${ACUIDADE_VISUAL_PRO.vendor} — Testes de acuidade visual digitais e emissão de prontuários optométricos`}
         actions={
-          <Button onClick={() => setDisplayMode(true)}>
-            <Maximize2 className="h-4 w-4" />
-            Modo TV / Monitor
-          </Button>
+          activeTab === "testes" ? (
+            <Button onClick={() => setDisplayMode(true)}>
+              <Maximize2 className="h-4 w-4" />
+              Modo TV / Monitor
+            </Button>
+          ) : (
+            <Button>
+              <Plus className="h-4 w-4" />
+              Novo documento
+            </Button>
+          )
         }
       />
 
+      <div className="mb-6 flex gap-2 border-b border-slate-200">
+        <button
+          type="button"
+          onClick={() => setActiveTab("testes")}
+          className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
+            activeTab === "testes"
+              ? "border-primary-600 text-primary-600"
+              : "border-transparent text-slate-500 hover:text-slate-700"
+          }`}
+        >
+          Testes de Visão
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("prontuarios")}
+          className={`border-b-2 px-4 py-2 text-sm font-medium transition-colors ${
+            activeTab === "prontuarios"
+              ? "border-primary-600 text-primary-600"
+              : "border-transparent text-slate-500 hover:text-slate-700"
+          }`}
+        >
+          Prontuários
+        </button>
+      </div>
+
+      {activeTab === "prontuarios" ? (
+        <div className="space-y-6">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {documentTemplates.map((doc) => (
+              <Card key={doc.type} className="cursor-pointer transition-shadow hover:shadow-md">
+                <CardContent className="flex items-start gap-4 py-5">
+                  <div className="rounded-lg bg-primary-50 p-3">
+                    <FileText className="h-6 w-6 text-primary-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-900">{doc.name}</p>
+                    <p className="mt-1 text-sm text-slate-500">{doc.description}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ClipboardList className="h-5 w-5" />
+                Documentos emitidos
+              </CardTitle>
+              <CardDescription>
+                Histórico de prontuários e laudos gerados pelo sistema
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {demoClinicalRecords.map((record) => {
+                  const template = documentTemplates.find(
+                    (t) => t.type === record.document_type,
+                  );
+                  return (
+                    <div
+                      key={record.id}
+                      className="flex items-center justify-between rounded-lg border border-slate-100 p-4"
+                    >
+                      <div>
+                        <p className="font-medium text-slate-900">
+                          {template?.name}
+                        </p>
+                        <p className="text-sm text-slate-500">
+                          {record.client_name} — {formatDate(record.exam_date)}
+                        </p>
+                        {record.acuity_result_od && (
+                          <p className="mt-1 text-xs text-slate-400">
+                            OD: {record.acuity_result_od} | OE: {record.acuity_result_oe}
+                          </p>
+                        )}
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-slate-500">{record.optometrist}</p>
+                        <Button size="sm" variant="outline" className="mt-2">
+                          Imprimir
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      ) : (
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-1">
           <Card>
@@ -364,6 +474,7 @@ export default function AcuidadeVisualPage() {
           </Card>
         </div>
       </div>
+      )}
     </AppShell>
   );
 }

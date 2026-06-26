@@ -1,13 +1,13 @@
 # OptiCare ERP
 
-Sistema de gestão completo para óticas, unificando recursos do **SavWin WEB** (ERP ótico) com o **Sistema de Acuidade Visual Digital** da JL Soluções Digitais.
+Sistema de gestão completo para óticas, unificando recursos do **SavWin WEB** (ERP ótico) com o **Acuidade Visual Pró** da JL Soluções Digitais.
 
 ## Módulos
 
 ### Ativos (MVP)
 - **Painel** — Dashboard com indicadores do negócio
 - **Clientes** — Cadastro, busca, receitas oftálmicas
-- **Acuidade Visual** — Testes digitais calibrados (Snellen, Ishihara, ETDRS, Jaeger, Infantil, Estereopsia, Ofuscamento) com modo TV/monitor
+- **Acuidade Visual Pró** — Testes digitais calibrados + prontuários optométricos (modo TV/monitor)
 
 ### Em desenvolvimento (Beta)
 - Clínica / Agenda de consultas
@@ -50,8 +50,9 @@ Acesse [http://localhost:3000](http://localhost:3000)
 | Clínica/Agenda Optometria | 🔶 Beta |
 | SavWin Vision (vendas digitais) | ⏳ Planejado |
 
-## Funcionalidades JL Acuidade Visual
+## Funcionalidades Acuidade Visual Pró (JL Soluções Digitais)
 
+### Testes de visão
 | Teste | Status |
 |---|---|
 | Snellen | ✅ Ativo |
@@ -63,6 +64,15 @@ Acesse [http://localhost:3000](http://localhost:3000)
 | Ofuscamento | ✅ Ativo |
 | Modo TV/Monitor fullscreen | ✅ Ativo |
 | Distâncias 2m, 3m, 4m, 6m | ✅ Ativo |
+
+### Prontuários optométricos
+| Documento | Status |
+|---|---|
+| Receita de Óculos e Lentes | ✅ Ativo |
+| Ficha Clínica | ✅ Ativo |
+| Laudo de Acuidade Visual | ✅ Ativo |
+| Declaração de Comparecimento | ✅ Ativo |
+| Guia de Encaminhamento | ✅ Ativo |
 
 ## Estrutura do projeto
 

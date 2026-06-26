@@ -1,4 +1,4 @@
-// Tipos de teste de acuidade visual (inspirado em JL Soluções Digitais / AcuiTest Vision)
+// Tipos de teste de acuidade visual — Acuidade Visual Pró (JL Soluções Digitais)
 
 export type TestDistance = 2 | 3 | 4 | 6;
 
