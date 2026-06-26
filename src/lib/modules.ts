@@ -80,7 +80,7 @@ export const systemModules: SystemModule[] = [
     description: "Contas, fluxo de caixa e DRE",
     href: "/financeiro",
     icon: "Wallet",
-    status: "beta",
+    status: "active",
     category: "gestao",
   },
   {

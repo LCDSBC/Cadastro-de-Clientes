@@ -94,6 +94,30 @@ export interface Sale {
   delivery_date?: string;
 }
 
+export interface FinancialAccount {
+  id: string;
+  type: "receber" | "pagar";
+  client_id?: string;
+  client_name?: string;
+  sale_id?: string;
+  description: string;
+  amount: number;
+  due_date: string;
+  paid_date?: string;
+  status: "pendente" | "pago" | "vencido" | "cancelado";
+  payment_method?: string;
+  created_at: string;
+}
+
+export interface FinancialSummary {
+  totalReceber: number;
+  totalPagar: number;
+  saldoPrevisto: number;
+  vencidos: number;
+  recebidoMes: number;
+  pagoMes: number;
+}
+
 export interface DashboardStats {
   totalClients: number;
   monthlySales: number;
@@ -251,5 +275,64 @@ export const demoSales: Sale[] = [
       },
     ],
     created_at: "2025-06-22T14:00:00Z",
+  },
+];
+
+export const demoFinancialAccounts: FinancialAccount[] = [
+  {
+    id: "fa1",
+    type: "receber",
+    client_id: "1",
+    client_name: "Maria Silva Santos",
+    sale_id: "1",
+    description: "Venda #1 — Armação + Lente Varilux",
+    amount: 1489.0,
+    due_date: "2025-07-05",
+    status: "pendente",
+    created_at: "2025-06-20T10:00:00Z",
+  },
+  {
+    id: "fa2",
+    type: "receber",
+    client_id: "2",
+    client_name: "João Pedro Oliveira",
+    description: "Parcela 1/3 — Armação + lente básica",
+    amount: 250.0,
+    due_date: "2025-06-15",
+    status: "vencido",
+    created_at: "2025-06-01T10:00:00Z",
+  },
+  {
+    id: "fa3",
+    type: "pagar",
+    description: "Fornecedor Essilor — lentes oftálmicas",
+    amount: 3200.0,
+    due_date: "2025-07-10",
+    status: "pendente",
+    created_at: "2025-06-18T09:00:00Z",
+  },
+  {
+    id: "fa4",
+    type: "pagar",
+    description: "Aluguel da loja — Junho/2025",
+    amount: 4500.0,
+    due_date: "2025-06-10",
+    paid_date: "2025-06-10",
+    status: "pago",
+    payment_method: "PIX",
+    created_at: "2025-06-01T08:00:00Z",
+  },
+  {
+    id: "fa5",
+    type: "receber",
+    client_id: "3",
+    client_name: "Ana Carolina Mendes",
+    description: "Venda à vista — Lentes de contato",
+    amount: 380.0,
+    due_date: "2025-06-20",
+    paid_date: "2025-06-20",
+    status: "pago",
+    payment_method: "Cartão de crédito",
+    created_at: "2025-06-20T14:00:00Z",
   },
 ];
