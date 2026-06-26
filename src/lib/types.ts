@@ -36,11 +36,14 @@ export interface Prescription {
 export interface AcuityExam {
   id: string;
   client_id?: string;
+  client_name?: string;
+  appointment_id?: string;
   test_type: string;
   distance_meters: number;
   eye: "OD" | "OE" | "AO";
   result_acuity?: string;
   result_logmar?: string;
+  chart_row?: number;
   notes?: string;
   performed_by?: string;
   performed_at: string;

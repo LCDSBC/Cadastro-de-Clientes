@@ -10,6 +10,7 @@ import {
   FileText,
   BarChart3,
   Settings,
+  ClipboardList,
   type LucideIcon,
 } from "lucide-react";
 
@@ -25,6 +26,7 @@ const iconMap: Record<string, LucideIcon> = {
   FileText,
   BarChart3,
   Settings,
+  ClipboardList,
 };
 
 interface IconProps {

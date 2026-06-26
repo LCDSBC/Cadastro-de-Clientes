@@ -13,6 +13,7 @@ import { classifyPrescriptionGrade, LENS_GRADE_COLORS } from "@/lib/lens-grade";
 import { getStorageStatus } from "@/lib/prontuarios-store";
 import { formatCpfCnpj, formatPhone, formatDate } from "@/lib/utils";
 import { Plus, Search, User, FileText, X, Loader2 } from "lucide-react";
+import { PatientHistoryPanel } from "@/components/clientes/patient-history-panel";
 
 export default function ClientesPage() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -411,6 +412,11 @@ export default function ClientesPage() {
                   )}
                 </CardContent>
               </Card>
+
+              <PatientHistoryPanel
+                clientId={selectedClient.id}
+                clientName={selectedClient.name}
+              />
             </div>
           ) : (
             <Card>

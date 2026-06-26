@@ -30,6 +30,15 @@ export const systemModules: SystemModule[] = [
     category: "gestao",
   },
   {
+    id: "anamnese",
+    name: "Anamnese",
+    description: "Ficha clínica estruturada e histórico do paciente",
+    href: "/anamnese",
+    icon: "ClipboardList",
+    status: "active",
+    category: "clinica",
+  },
+  {
     id: "acuidade-visual",
     name: "Acuidade Visual Pró",
     description: "Testes de visão + prontuários optométricos (JL Soluções Digitais)",

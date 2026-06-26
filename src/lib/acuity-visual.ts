@@ -136,3 +136,24 @@ export function acuityToSnellen(decimal: number): string {
   const denominator = Math.round(20 / decimal);
   return `20/${denominator}`;
 }
+
+export function getAcuityResultAtRow(
+  testType: AcuityTestType,
+  row: number,
+  plate = 0,
+): { acuity: string; logMAR: string; chartRow: number } {
+  if (testType === "ishihara") {
+    const p = ishiharaPlates[Math.min(plate, ishiharaPlates.length - 1)];
+    return {
+      acuity: `Ishihara placa ${p.number}`,
+      logMAR: p.answer,
+      chartRow: plate,
+    };
+  }
+  if (testType === "etdrs") {
+    const r = etdrsChart[Math.min(row, etdrsChart.length - 1)];
+    return { acuity: r.acuity, logMAR: r.logMAR, chartRow: row };
+  }
+  const r = snellenChart[Math.min(row, snellenChart.length - 1)];
+  return { acuity: r.acuity, logMAR: r.logMAR, chartRow: row };
+}
