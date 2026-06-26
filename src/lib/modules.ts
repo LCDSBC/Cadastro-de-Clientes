@@ -53,7 +53,7 @@ export const systemModules: SystemModule[] = [
     description: "Armações, lentes e inventário em grade",
     href: "/estoque",
     icon: "Package",
-    status: "beta",
+    status: "active",
     category: "gestao",
   },
   {
@@ -62,7 +62,7 @@ export const systemModules: SystemModule[] = [
     description: "Orçamentos, vendas e ordens de serviço",
     href: "/vendas",
     icon: "ShoppingCart",
-    status: "beta",
+    status: "active",
     category: "gestao",
   },
   {

@@ -57,6 +57,27 @@ export interface Product {
   stock_quantity: number;
   min_stock: number;
   active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface LensGridEntry {
+  id: string;
+  product_id: string;
+  esf: number;
+  cil: number;
+  eixo?: number;
+  quantity: number;
+}
+
+export interface SaleItem {
+  id: string;
+  sale_id: string;
+  product_id?: string;
+  description: string;
+  quantity: number;
+  unit_price: number;
+  total: number;
 }
 
 export interface Sale {
@@ -65,7 +86,11 @@ export interface Sale {
   client_name: string;
   status: "orcamento" | "aprovado" | "producao" | "entregue" | "cancelado";
   total: number;
+  discount: number;
+  items: SaleItem[];
+  notes?: string;
   created_at: string;
+  updated_at?: string;
   delivery_date?: string;
 }
 
@@ -186,6 +211,25 @@ export const demoSales: Sale[] = [
     client_name: "Maria Silva Santos",
     status: "producao",
     total: 1489.0,
+    discount: 0,
+    items: [
+      {
+        id: "i1",
+        sale_id: "1",
+        description: "Armação Ray-Ban RB5228",
+        quantity: 1,
+        unit_price: 599,
+        total: 599,
+      },
+      {
+        id: "i2",
+        sale_id: "1",
+        description: "Lente Varilux Comfort 1.67",
+        quantity: 1,
+        unit_price: 890,
+        total: 890,
+      },
+    ],
     created_at: "2025-06-20T10:00:00Z",
     delivery_date: "2025-06-28",
   },
@@ -195,6 +239,17 @@ export const demoSales: Sale[] = [
     client_name: "João Pedro Oliveira",
     status: "orcamento",
     total: 750.0,
+    discount: 0,
+    items: [
+      {
+        id: "i3",
+        sale_id: "2",
+        description: "Armação + lente básica",
+        quantity: 1,
+        unit_price: 750,
+        total: 750,
+      },
+    ],
     created_at: "2025-06-22T14:00:00Z",
   },
 ];
