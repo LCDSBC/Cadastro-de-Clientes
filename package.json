@@ -10,7 +10,8 @@
     "db:setup": "cat supabase/setup-completo.sql",
     "db:push": "npx supabase db push",
     "db:reset": "npx supabase db reset",
-    "db:seed": "npx supabase db seed"
+    "db:seed": "npx supabase db seed",
+    "db:verify": "node scripts/verify-supabase.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.1",

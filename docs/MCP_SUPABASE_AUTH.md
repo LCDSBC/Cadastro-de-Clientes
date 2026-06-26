@@ -49,4 +49,14 @@ O agente irá:
 
 - Use um projeto de **desenvolvimento**, não produção
 - A autenticação é feita no **Cursor Desktop** logado na sua conta
-- Cloud Agents usam a mesma conexão MCP após você autenticar
+- **Cloud Agents** podem não herdar o MCP do Desktop — se o agente disser `needsAuth`, use a Opção B (cole URL + anon key no chat)
+
+## Se o Cloud Agent não enxergar o MCP
+
+1. No Supabase: **Settings → API** → copie URL e chave `anon`
+2. Envie ao agente: `URL: ...` e `ANON_KEY: ...`
+3. Ou rode localmente:
+   ```bash
+   node scripts/create-env.mjs "https://xxx.supabase.co" "eyJ..."
+   npm run db:verify
+   ```
