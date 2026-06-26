@@ -98,7 +98,7 @@ export const systemModules: SystemModule[] = [
     description: "Indicadores e análises",
     href: "/relatorios",
     icon: "BarChart3",
-    status: "beta",
+    status: "active",
     category: "gestao",
   },
   {
