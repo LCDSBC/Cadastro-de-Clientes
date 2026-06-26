@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Eye, Menu, X } from "lucide-react";
+import { Eye, LogOut, Menu, User, X } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/components/auth/auth-provider";
 import { ModuleIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { systemModules } from "@/lib/modules";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +20,7 @@ const statusBadge = {
 export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, signOut, authEnabled } = useAuth();
 
   const nav = (
     <nav className="flex flex-1 flex-col gap-1 p-4">
@@ -86,7 +89,26 @@ export function Sidebar() {
         </div>
         {nav}
         <div className="mt-auto border-t border-slate-100 p-4">
-          <p className="text-xs text-slate-400">v0.1.0 — MVP</p>
+          {authEnabled && user ? (
+            <div className="mb-3 flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2">
+              <User className="h-4 w-4 shrink-0 text-slate-500" />
+              <span className="flex-1 truncate text-xs text-slate-600">{user.email}</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => signOut()}
+                className="h-7 w-7 p-0"
+                title="Sair"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          ) : authEnabled ? (
+            <Link href="/login" className="mb-3 block text-xs font-medium text-primary-600 hover:underline">
+              Fazer login
+            </Link>
+          ) : null}
+          <p className="text-xs text-slate-400">v0.2.0 — Beta</p>
         </div>
       </aside>
     </>

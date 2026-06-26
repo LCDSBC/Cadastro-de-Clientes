@@ -11,10 +11,10 @@ Sistema de gestão completo para óticas, unificando recursos do **SavWin WEB** 
 
 ### Em desenvolvimento (Beta)
 - Clínica / Agenda de consultas
-- Estoque (armações, lentes, grade)
-- Vendas e ordens de serviço
+- **Estoque** — CRUD de produtos com alerta de estoque baixo
+- **Vendas** — Orçamentos, vendas e controle de status
 - Laboratório
-- Financeiro
+- **Financeiro** — Contas a pagar/receber com baixa
 - Relatórios
 - Configurações
 
@@ -55,9 +55,9 @@ npm run dev
 | Módulo SavWin | Status OptiCare |
 |---|---|
 | Gestão de Clientes | ✅ Ativo |
-| Gestão de Estoque | 🔶 Beta |
-| Gestão Comercial (Vendas/OS) | 🔶 Beta |
-| Gestão Financeira | 🔶 Beta |
+| Gestão de Estoque | 🔶 Beta (CRUD ativo) |
+| Gestão Comercial (Vendas/OS) | 🔶 Beta (vendas ativas) |
+| Gestão Financeira | 🔶 Beta (contas ativas) |
 | Módulo Fiscal | ⏳ Planejado |
 | Controle de Laboratório | 🔶 Beta |
 | Clínica/Agenda Optometria | 🔶 Beta |
@@ -90,6 +90,7 @@ npm run dev
 ### Persistência e backup
 | Recurso | Status |
 |---|---|
+| Autenticação de usuários (Supabase Auth) | ✅ Login, cadastro e logout |
 | Salvar no Supabase (nuvem) | ✅ Quando configurado |
 | Armazenamento local (offline) | ✅ localStorage automático |
 | Exportar PDF individual | ✅ |

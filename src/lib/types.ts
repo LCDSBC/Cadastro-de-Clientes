@@ -65,8 +65,25 @@ export interface Sale {
   client_name: string;
   status: "orcamento" | "aprovado" | "producao" | "entregue" | "cancelado";
   total: number;
+  discount?: number;
+  notes?: string;
   created_at: string;
   delivery_date?: string;
+}
+
+export interface FinancialAccount {
+  id: string;
+  type: "receber" | "pagar";
+  client_id?: string;
+  client_name?: string;
+  sale_id?: string;
+  description: string;
+  amount: number;
+  due_date: string;
+  paid_date?: string;
+  status: "pendente" | "pago" | "vencido" | "cancelado";
+  payment_method?: string;
+  created_at: string;
 }
 
 export interface DashboardStats {
@@ -195,6 +212,42 @@ export const demoSales: Sale[] = [
     client_name: "João Pedro Oliveira",
     status: "orcamento",
     total: 750.0,
+    created_at: "2025-06-22T14:00:00Z",
+  },
+];
+
+export const demoFinancialAccounts: FinancialAccount[] = [
+  {
+    id: "1",
+    type: "receber",
+    client_id: "1",
+    client_name: "Maria Silva Santos",
+    description: "Venda #1 — Armação + Lentes",
+    amount: 1489.0,
+    due_date: "2025-07-05",
+    status: "pendente",
+    created_at: "2025-06-20T10:00:00Z",
+  },
+  {
+    id: "2",
+    type: "pagar",
+    description: "Fornecedor Essilor — Lentes",
+    amount: 3200.0,
+    due_date: "2025-06-30",
+    status: "pendente",
+    created_at: "2025-06-15T09:00:00Z",
+  },
+  {
+    id: "3",
+    type: "receber",
+    client_id: "2",
+    client_name: "João Pedro Oliveira",
+    description: "Venda #2 — Orçamento",
+    amount: 750.0,
+    due_date: "2025-06-25",
+    paid_date: "2025-06-24",
+    status: "pago",
+    payment_method: "PIX",
     created_at: "2025-06-22T14:00:00Z",
   },
 ];

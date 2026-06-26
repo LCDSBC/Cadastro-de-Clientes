@@ -288,6 +288,13 @@ CREATE POLICY "appointments_select" ON appointments FOR SELECT USING (true);
 CREATE POLICY "appointments_insert" ON appointments FOR INSERT WITH CHECK (true);
 CREATE POLICY "appointments_update" ON appointments FOR UPDATE USING (true);
 CREATE POLICY "appointments_delete" ON appointments FOR DELETE USING (true);
+
+-- Financial accounts
+ALTER TABLE financial_accounts ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "financial_accounts_select" ON financial_accounts FOR SELECT USING (true);
+CREATE POLICY "financial_accounts_insert" ON financial_accounts FOR INSERT WITH CHECK (true);
+CREATE POLICY "financial_accounts_update" ON financial_accounts FOR UPDATE USING (true);
+CREATE POLICY "financial_accounts_delete" ON financial_accounts FOR DELETE USING (true);
 -- Dados iniciais para demonstração do OptiCare ERP
 
 INSERT INTO stores (id, name, cnpj, email, phone, address, city, state, zip_code)
