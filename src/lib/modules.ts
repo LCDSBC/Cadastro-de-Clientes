@@ -107,7 +107,7 @@ export const systemModules: SystemModule[] = [
     description: "Usuários, loja e integrações",
     href: "/configuracoes",
     icon: "Settings",
-    status: "beta",
+    status: "active",
     category: "integracao",
   },
 ];

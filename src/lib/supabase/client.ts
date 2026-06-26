@@ -45,6 +45,17 @@ export async function testConnection(): Promise<{
     message: data?.[0]?.name
       ? `Conectado à loja: ${data[0].name}`
       : "Conectado! Execute o seed.sql para dados de demonstração.",
-    tables: ["stores", "clients", "clinical_documents", "prescriptions", "products"],
+    tables: [
+      "stores",
+      "clients",
+      "products",
+      "sales",
+      "sale_items",
+      "financial_accounts",
+      "service_orders",
+      "appointments",
+      "clinical_documents",
+      "prescriptions",
+    ],
   };
 }

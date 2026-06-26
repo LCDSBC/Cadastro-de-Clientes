@@ -160,6 +160,28 @@ export interface ClinicSummary {
   cancelados: number;
 }
 
+export interface StoreSettings {
+  id: string;
+  name: string;
+  cnpj: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+  zip_code?: string;
+  active: boolean;
+  updated_at?: string;
+}
+
+export interface AppPreferences {
+  default_appointment_duration: number;
+  low_stock_alert: boolean;
+  auto_confirm_appointments: boolean;
+  receipt_footer?: string;
+  business_hours?: string;
+}
+
 export interface DashboardStats {
   totalClients: number;
   monthlySales: number;
@@ -465,3 +487,24 @@ export const demoAppointments: Appointment[] = [
     created_at: "2025-06-18T08:00:00Z",
   },
 ];
+
+export const demoStoreSettings: StoreSettings = {
+  id: "a0000000-0000-4000-8000-000000000001",
+  name: "Ótica OptiCare Demo",
+  cnpj: "12345678000190",
+  email: "contato@opticare.com.br",
+  phone: "1133334444",
+  address: "Rua das Flores, 123 — Centro",
+  city: "São Paulo",
+  state: "SP",
+  zip_code: "01310100",
+  active: true,
+};
+
+export const defaultAppPreferences: AppPreferences = {
+  default_appointment_duration: 30,
+  low_stock_alert: true,
+  auto_confirm_appointments: false,
+  receipt_footer: "Obrigado pela preferência! — OptiCare ERP",
+  business_hours: "Seg–Sex 9h–18h | Sáb 9h–13h",
+};
