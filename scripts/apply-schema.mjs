@@ -30,7 +30,7 @@ async function main() {
   const connectionString =
     env.DATABASE_URL ||
     (env.SUPABASE_DB_PASSWORD
-      ? `postgresql://postgres.${projectRef}:${encodeURIComponent(env.SUPABASE_DB_PASSWORD)}@aws-0-sa-east-1.pooler.supabase.com:6543/postgres`
+      ? `postgresql://postgres.${projectRef}:${encodeURIComponent(env.SUPABASE_DB_PASSWORD)}@aws-1-sa-east-1.pooler.supabase.com:5432/postgres`
       : null);
 
   if (!connectionString) {
@@ -54,16 +54,21 @@ async function main() {
     await client.query(sql);
     console.log("✅ Schema aplicado com sucesso!");
   } catch (err) {
-    // Tentar connection string direta se pooler falhar
+    // Tentar conexão direta como fallback
     if (!env.DATABASE_URL && env.SUPABASE_DB_PASSWORD) {
       const direct = `postgresql://postgres:${encodeURIComponent(env.SUPABASE_DB_PASSWORD)}@db.${projectRef}.supabase.co:5432/postgres`;
       console.log("⚠️  Pooler falhou, tentando conexão direta...");
       const client2 = new pg.Client({ connectionString: direct, ssl: { rejectUnauthorized: false } });
-      await client2.connect();
-      await client2.query(sql);
-      await client2.end();
-      console.log("✅ Schema aplicado com sucesso (conexão direta)!");
-      return;
+      try {
+        await client2.connect();
+        await client2.query(sql);
+        await client2.end();
+        console.log("✅ Schema aplicado com sucesso (conexão direta)!");
+        return;
+      } catch (e2) {
+        await client2.end().catch(() => {});
+        throw e2;
+      }
     }
     throw err;
   } finally {
