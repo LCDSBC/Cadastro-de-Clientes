@@ -5,7 +5,7 @@ import type { StoreSettings } from "@/lib/types";
 import { formatCpfCnpj, formatDate } from "@/lib/utils";
 import { PrintField } from "@/components/prontuarios/document-print-layout";
 import { OptometricDisclaimer } from "@/components/prontuarios/optometric-disclaimer";
-import { PrintHeaderEmblem } from "@/components/prontuarios/print-header-emblem";
+import { PrintClinicHeader, PRINT_TITLE_DEFAULT_CLASS } from "@/components/prontuarios/print-clinic-header";
 import { ClinicalPrintPage } from "@/components/prontuarios/clinical-print-page";
 
 interface AnamnesisPrintProps {
@@ -46,36 +46,28 @@ export function AnamnesisPrint({ record, client, store }: AnamnesisPrintProps) {
   const ex = record.exames;
   const clinicName = store?.name ?? "Ótica OptiCare";
   const clinicCnpj = store?.cnpj ?? "";
-  const clinicAddress = [store?.address, store?.city, store?.state]
-    .filter(Boolean)
-    .join(" — ");
   const clinicPhone = store?.phone ?? "";
 
   return (
     <ClinicalPrintPage>
       <header className="mb-6 border-b-2 border-slate-800 pb-4">
-        <div className="flex items-start gap-4">
-          <PrintHeaderEmblem />
-          <div className="min-w-0 flex-1">
-            <h1 className="text-lg font-bold uppercase tracking-wide">{clinicName}</h1>
-            {clinicCnpj && (
-              <p className="mt-1 text-xs text-slate-600">
-                CNPJ: {formatCpfCnpj(clinicCnpj.replace(/\D/g, "")) || clinicCnpj}
-              </p>
-            )}
-            {clinicAddress && <p className="text-xs text-slate-600">{clinicAddress}</p>}
-            {clinicPhone && (
-              <p className="text-xs text-slate-600">Tel: {clinicPhone}</p>
-            )}
-            {record.horario_entrada && (
+        <PrintClinicHeader
+          name={clinicName}
+          cnpj={clinicCnpj}
+          address={store?.address}
+          city={store?.city}
+          state={store?.state}
+          phone={clinicPhone}
+          extra={
+            record.horario_entrada ? (
               <p className="mt-1 text-xs text-slate-500">
                 Horário: {record.horario_entrada}
                 {record.horario_saida ? ` — ${record.horario_saida}` : ""}
               </p>
-            )}
-          </div>
-        </div>
-        <h2 className="mt-4 text-center text-base font-bold uppercase tracking-wider text-slate-800">
+            ) : undefined
+          }
+        />
+        <h2 className={PRINT_TITLE_DEFAULT_CLASS}>
           Ficha de Anamnese e Exame Clínico Oftalmológico
         </h2>
       </header>

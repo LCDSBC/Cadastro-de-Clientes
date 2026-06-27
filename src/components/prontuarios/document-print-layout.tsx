@@ -1,12 +1,16 @@
 import type { DocumentFormData } from "@/lib/document-form";
 import { formatCpfCnpj, formatDate } from "@/lib/utils";
 import { OptometricDisclaimer } from "./optometric-disclaimer";
-import { PrintHeaderEmblem } from "./print-header-emblem";
 import { ClinicalPrintPage } from "./clinical-print-page";
+import {
+  PrintClinicHeader,
+  PRINT_TITLE_DEFAULT_CLASS,
+} from "./print-clinic-header";
 
 interface PrintLayoutProps {
   data: DocumentFormData;
   title: string;
+  titleClassName?: string;
   children: React.ReactNode;
   showPatientSignature?: boolean;
   showOptometricDisclaimer?: boolean;
@@ -36,6 +40,7 @@ function PrintField({
 export function DocumentPrintLayout({
   data,
   title,
+  titleClassName = PRINT_TITLE_DEFAULT_CLASS,
   children,
   showPatientSignature = true,
   showOptometricDisclaimer = false,
@@ -43,26 +48,15 @@ export function DocumentPrintLayout({
   return (
     <ClinicalPrintPage>
       <header className="mb-6 border-b-2 border-slate-800 pb-4">
-        <div className="flex items-start gap-4">
-          <PrintHeaderEmblem />
-          <div className="flex min-w-0 flex-1 items-start gap-4">
-            <div className="min-w-0">
-              <h1 className="text-lg font-bold uppercase tracking-wide">
-                {data.clinic.name}
-              </h1>
-              <p className="mt-1 text-xs text-slate-600">
-                CNPJ: {formatCpfCnpj(data.clinic.cnpj.replace(/\D/g, "")) || data.clinic.cnpj}
-              </p>
-              <p className="text-xs text-slate-600">{data.clinic.address}</p>
-              <p className="text-xs text-slate-600">
-                {data.clinic.city}/{data.clinic.state} — Tel: {data.clinic.phone}
-              </p>
-            </div>
-          </div>
-        </div>
-        <h2 className="mt-4 text-center text-base font-bold uppercase tracking-wider text-slate-800">
-          {title}
-        </h2>
+        <PrintClinicHeader
+          name={data.clinic.name}
+          cnpj={data.clinic.cnpj}
+          address={data.clinic.address}
+          city={data.clinic.city}
+          state={data.clinic.state}
+          phone={data.clinic.phone}
+        />
+        <h2 className={titleClassName}>{title}</h2>
       </header>
 
       <section className="mb-6 grid grid-cols-2 gap-4 rounded border border-slate-200 p-4">

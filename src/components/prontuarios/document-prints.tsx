@@ -1,6 +1,7 @@
 import type { DocumentFormData } from "@/lib/document-form";
 import { formatRefractionLine } from "@/lib/document-form";
 import { DocumentPrintLayout, PrintField } from "./document-print-layout";
+import { PRINT_TITLE_LAUDO_CLASS } from "./print-clinic-header";
 import { formatCpfCnpj, formatDate } from "@/lib/utils";
 
 export function ReceitaOculosPrint({ data }: { data: DocumentFormData }) {
@@ -8,6 +9,7 @@ export function ReceitaOculosPrint({ data }: { data: DocumentFormData }) {
     <DocumentPrintLayout
       data={data}
       title="Laudo Optométrico"
+      titleClassName={PRINT_TITLE_LAUDO_CLASS}
       showPatientSignature={false}
       showOptometricDisclaimer
     >
