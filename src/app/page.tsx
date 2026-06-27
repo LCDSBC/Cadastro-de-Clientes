@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowRight, Eye, Package, ShoppingCart, Wallet } from "lucide-react";
+import { ArrowRight, Eye, Package, ShoppingCart, Wallet, Link2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TEST_ACCESS_PATH } from "@/lib/test-access";
 
 export default function HomePage() {
   return (
@@ -12,11 +13,19 @@ export default function HomePage() {
           </div>
           <span className="text-xl font-bold text-white">OptiCare ERP</span>
         </div>
-        <Link href="/dashboard">
-          <Button variant="outline" className="border-white/20 bg-white/10 text-white hover:bg-white/20">
-            Acessar Sistema
-          </Button>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href={TEST_ACCESS_PATH}>
+            <Button variant="ghost" className="text-white/80 hover:bg-white/10 hover:text-white">
+              <Link2 className="h-4 w-4" />
+              Link de teste
+            </Button>
+          </Link>
+          <Link href="/dashboard">
+            <Button variant="outline" className="border-white/20 bg-white/10 text-white hover:bg-white/20">
+              Acessar Sistema
+            </Button>
+          </Link>
+        </div>
       </header>
 
       <main className="mx-auto max-w-7xl px-6 py-20">
@@ -37,6 +46,16 @@ export default function HomePage() {
               <Button size="lg" className="bg-accent-500 hover:bg-accent-600">
                 Começar agora
                 <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href={TEST_ACCESS_PATH}>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white/20 bg-transparent text-white hover:bg-white/10"
+              >
+                <Link2 className="h-4 w-4" />
+                Link de teste
               </Button>
             </Link>
             <Link href="/acuidade-visual">
