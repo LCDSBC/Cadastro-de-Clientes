@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { loadAnamnesisRecords } from "@/lib/anamnesis-store";
 import { loadAcuityExams } from "@/lib/acuity-exams-store";
 import { loadPrescriptions } from "@/lib/clients-store";
@@ -16,7 +14,7 @@ import {
   formatHistoryDate,
   type PatientHistoryEvent,
 } from "@/lib/patient-history";
-import { History, Loader2, Plus } from "lucide-react";
+import { History, Loader2 } from "lucide-react";
 
 interface PatientHistoryPanelProps {
   clientId: string;
@@ -76,24 +74,11 @@ export function PatientHistoryPanel({
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between">
+      <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <History className="h-5 w-5" />
           Histórico do paciente
         </CardTitle>
-        <div className="flex gap-2">
-          <Link href={`/anamnese?client_id=${clientId}`}>
-            <Button size="sm" variant="outline">
-              <Plus className="h-4 w-4" />
-              Anamnese
-            </Button>
-          </Link>
-          <Link href={`/acuidade-visual?client_id=${clientId}`}>
-            <Button size="sm" variant="outline">
-              Teste AV
-            </Button>
-          </Link>
-        </div>
       </CardHeader>
       <CardContent>
         {events.length > 0 ? (
@@ -116,8 +101,7 @@ export function PatientHistoryPanel({
           </ol>
         ) : (
           <p className="text-sm text-slate-500">
-            Nenhum registro clínico para {clientName}. Inicie com uma anamnese
-            ou teste de acuidade.
+            Nenhum registro clínico para {clientName}.
           </p>
         )}
         <p className="mt-4 text-xs text-slate-400">
