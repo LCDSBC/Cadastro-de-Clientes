@@ -5,7 +5,7 @@ export function PrintHeaderEmblem({ className = "" }: { className?: string }) {
     <img
       src={OPTOMETRY_EMBLEM_PATH}
       alt={OPTOMETRY_EMBLEM_ALT}
-      className={`h-16 w-16 shrink-0 object-contain print:h-[18mm] print:w-[18mm] ${className}`}
+      className={`h-[6rem] w-[6rem] shrink-0 object-contain print:h-[27mm] print:w-[27mm] ${className}`}
     />
   );
 }

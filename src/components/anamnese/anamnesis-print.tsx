@@ -6,6 +6,7 @@ import { formatCpfCnpj, formatDate } from "@/lib/utils";
 import { PrintField } from "@/components/prontuarios/document-print-layout";
 import { OptometricDisclaimer } from "@/components/prontuarios/optometric-disclaimer";
 import { PrintHeaderEmblem } from "@/components/prontuarios/print-header-emblem";
+import { ClinicalPrintPage } from "@/components/prontuarios/clinical-print-page";
 
 interface AnamnesisPrintProps {
   record: StructuredAnamnesis;
@@ -51,7 +52,7 @@ export function AnamnesisPrint({ record, client, store }: AnamnesisPrintProps) {
   const clinicPhone = store?.phone ?? "";
 
   return (
-    <div className="document-print mx-auto max-w-[210mm] bg-white p-8 text-slate-900">
+    <ClinicalPrintPage>
       <header className="mb-6 border-b-2 border-slate-800 pb-4">
         <div className="flex items-start gap-4">
           <PrintHeaderEmblem />
@@ -404,6 +405,6 @@ export function AnamnesisPrint({ record, client, store }: AnamnesisPrintProps) {
         </div>
         <OptometricDisclaimer className="mt-6" />
       </footer>
-    </div>
+    </ClinicalPrintPage>
   );
 }
