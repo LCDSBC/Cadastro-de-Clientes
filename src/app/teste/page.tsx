@@ -81,23 +81,33 @@ export default function TestePage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg">
               <Link2 className="h-5 w-5 text-primary-600" />
-              URL de acesso
+              Link de acesso para testes
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <code className="flex-1 break-all rounded-lg border border-primary-200 bg-white px-4 py-3 text-sm text-slate-800">
-              {accessUrl}
-            </code>
-            <Button variant="outline" onClick={() => void copyLink()}>
-              <Copy className="h-4 w-4" />
-              {copied ? "Copiado!" : "Copiar link"}
-            </Button>
-            <a href={accessUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="outline">
-                <ExternalLink className="h-4 w-4" />
-                Abrir
+          <CardContent className="space-y-4">
+            <p className="text-sm text-slate-600">
+              Compartilhe o endereço abaixo com avaliadores, equipe ou clientes em
+              homologação. O link abre este portal com atalhos para todos os módulos.
+            </p>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <code className="flex-1 break-all rounded-lg border border-primary-200 bg-white px-4 py-3 text-sm font-medium text-slate-800">
+                {accessUrl}
+              </code>
+              <Button variant="outline" onClick={() => void copyLink()}>
+                <Copy className="h-4 w-4" />
+                {copied ? "Copiado!" : "Copiar link"}
               </Button>
-            </a>
+              <a href={accessUrl} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline">
+                  <ExternalLink className="h-4 w-4" />
+                  Abrir
+                </Button>
+              </a>
+            </div>
+            <p className="text-xs text-slate-500">
+              Em produção, defina <code className="rounded bg-white px-1">NEXT_PUBLIC_APP_URL</code> no
+              ambiente para gerar o link público correto.
+            </p>
           </CardContent>
         </Card>
 

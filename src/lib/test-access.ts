@@ -11,11 +11,16 @@ export function getTestAccessUrl(origin?: string): string {
 export const TEST_QUICK_LINKS = [
   { href: "/dashboard", label: "Painel", description: "Indicadores gerais" },
   { href: "/clientes", label: "Clientes", description: "Cadastro e histórico" },
-  { href: "/anamnese", label: "Anamnese", description: "Ficha clínica estruturada" },
+  { href: "/anamnese", label: "Anamnese", description: "Ficha completa + impressão" },
   {
     href: "/acuidade-visual",
     label: "Acuidade Visual",
-    description: "Testes de visão e prontuários",
+    description: "Testes AV e Laudo Optométrico",
+  },
+  {
+    href: "/configuracoes",
+    label: "Profissionais",
+    description: "Cadastro de optometristas",
   },
   { href: "/clinica", label: "Clínica", description: "Agenda de consultas" },
   { href: "/estoque", label: "Estoque", description: "Produtos e inventário" },
@@ -25,9 +30,9 @@ export const TEST_QUICK_LINKS = [
 ] as const;
 
 export const TEST_CHECKLIST = [
-  "Abrir o Painel e conferir indicadores",
-  "Cadastrar ou selecionar um cliente",
-  "Preencher anamnese e salvar teste de acuidade",
-  "Criar orçamento em Vendas e avançar status",
-  "Conferir integrações em Financeiro e Laboratório",
+  "Abrir Configurações → Profissionais e conferir cadastro",
+  "Cadastrar ou selecionar um cliente em Clientes",
+  "Preencher anamnese completa e imprimir a ficha",
+  "Gerar Laudo Optométrico em Acuidade Visual → Prontuários",
+  "Agendar consulta em Clínica com profissional pré-definido",
 ] as const;
