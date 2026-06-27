@@ -3,7 +3,6 @@
 import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_STORE_ID } from "@/lib/supabase/config";
 import type { AcuityExam } from "@/lib/types";
-import { queueAcuityExamSync } from "@/lib/client-folder-sync";
 
 const LOCAL_KEY = "opticare_acuity_exams";
 
@@ -107,13 +106,17 @@ export async function saveAcuityExam(
         performed_at: full.performed_at,
       });
       if (!error) {
-        queueAcuityExamSync(full);
+        void import("@/lib/client-folder-sync").then(({ queueAcuityExamSync }) => {
+          queueAcuityExamSync(full);
+        });
         return full;
       }
     }
   }
 
-  queueAcuityExamSync(full);
+  void import("@/lib/client-folder-sync").then(({ queueAcuityExamSync }) => {
+    queueAcuityExamSync(full);
+  });
   return full;
 }
 

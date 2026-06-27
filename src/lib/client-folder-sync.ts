@@ -4,11 +4,6 @@ import JSZip from "jszip";
 import type { Client } from "@/lib/types";
 import type { StructuredAnamnesis } from "@/lib/anamnesis";
 import type { StoredClinicalDocument } from "./prontuarios-types";
-import { loadStoreSettings } from "./settings-store";
-import { loadClients } from "./clients-store";
-import { loadAnamnesisRecords } from "./anamnesis-store";
-import { loadAcuityExams } from "./acuity-exams-store";
-import { loadDocuments } from "./prontuarios-store";
 import {
   buildClientPdfFilename,
   documentTypeToFolderKind,
@@ -17,12 +12,6 @@ import {
   syncPdfToClientFolders,
   type ClientFolderDocumentKind,
 } from "./client-folder-storage";
-import {
-  renderAcuityResultsPdf,
-  renderAnamnesisPdf,
-  renderClientRegistrationPdf,
-  renderClinicalDocumentPdf,
-} from "./client-pdf-export";
 
 export interface ClientPdfItem {
   filename: string;
@@ -64,9 +53,34 @@ export interface RetroactiveSyncResult {
   message: string;
 }
 
-async function getStore() {
+async function getStoreSettings() {
+  const { loadStoreSettings } = await import("./settings-store");
   const { store } = await loadStoreSettings();
   return store;
+}
+
+async function getPdfRenderers() {
+  return import("./client-pdf-export");
+}
+
+async function getClients() {
+  const { loadClients } = await import("./clients-store");
+  return loadClients();
+}
+
+async function getAnamnesisRecords(clientId: string) {
+  const { loadAnamnesisRecords } = await import("./anamnesis-store");
+  return loadAnamnesisRecords(clientId);
+}
+
+async function getAcuityExams(clientId: string) {
+  const { loadAcuityExams } = await import("./acuity-exams-store");
+  return loadAcuityExams(clientId);
+}
+
+async function getDocuments() {
+  const { loadDocuments } = await import("./prontuarios-store");
+  return loadDocuments();
 }
 
 async function pushPdf(
@@ -87,10 +101,10 @@ async function pushPdf(
 
 export function queueClientRegistrationSync(client: Client): void {
   void (async () => {
-    const store = await getStore();
-    const pdf = await renderClientRegistrationPdf(client, store);
-    if (!pdf) return;
-    await pushPdf(client.name, "ficha-cadastro", pdf, client.updated_at.slice(0, 10));
+    const [store, pdf] = await Promise.all([getStoreSettings(), getPdfRenderers()]);
+    const blob = await pdf.renderClientRegistrationPdf(client, store);
+    if (!blob) return;
+    await pushPdf(client.name, "ficha-cadastro", blob, client.updated_at.slice(0, 10));
   })();
 }
 
@@ -99,16 +113,16 @@ export function queueAnamnesisSync(
   client?: Client | null,
 ): void {
   void (async () => {
-    const store = await getStore();
+    const [store, pdf] = await Promise.all([getStoreSettings(), getPdfRenderers()]);
     let resolvedClient = client;
     if (!resolvedClient && record.client_id) {
-      const { clients } = await loadClients();
+      const { clients } = await getClients();
       resolvedClient = clients.find((c) => c.id === record.client_id) ?? null;
     }
     const clientName = resolvedClient?.name ?? record.client_name ?? "Cliente";
-    const pdf = await renderAnamnesisPdf(record, resolvedClient, store);
-    if (!pdf) return;
-    await pushPdf(clientName, "anamnese", pdf, record.exam_date);
+    const blob = await pdf.renderAnamnesisPdf(record, resolvedClient, store);
+    if (!blob) return;
+    await pushPdf(clientName, "anamnese", blob, record.exam_date);
   })();
 }
 
@@ -116,9 +130,10 @@ export function queueClinicalDocumentSync(doc: StoredClinicalDocument): void {
   void (async () => {
     const kind = documentTypeToFolderKind(doc.document_type);
     if (!kind) return;
-    const pdf = await renderClinicalDocumentPdf(doc);
-    if (!pdf) return;
-    await pushPdf(doc.client_name, kind, pdf, doc.exam_date);
+    const pdf = await getPdfRenderers();
+    const blob = await pdf.renderClinicalDocumentPdf(doc);
+    if (!blob) return;
+    await pushPdf(doc.client_name, kind, blob, doc.exam_date);
   })();
 }
 
@@ -128,23 +143,26 @@ export function queueAcuityResultsSync(
 ): void {
   void (async () => {
     if (!clientId && !clientName) return;
-    const store = await getStore();
-    const exams = await loadAcuityExams(clientId);
+    const [store, pdf, exams] = await Promise.all([
+      getStoreSettings(),
+      getPdfRenderers(),
+      getAcuityExams(clientId ?? ""),
+    ]);
     const filtered = clientId
       ? exams.filter((e) => e.client_id === clientId)
       : exams.filter((e) => e.client_name === clientName);
     if (!filtered.length) return;
 
     const name = clientName || filtered[0]?.client_name || "Cliente";
-    const pdf = await renderAcuityResultsPdf(name, filtered, store);
-    if (!pdf) return;
+    const blob = await pdf.renderAcuityResultsPdf(name, filtered, store);
+    if (!blob) return;
 
     const latestDate = filtered
       .map((e) => e.performed_at.slice(0, 10))
       .sort()
       .reverse()[0];
 
-    await pushPdf(name, "resultados-acuidade", pdf, latestDate);
+    await pushPdf(name, "resultados-acuidade", blob, latestDate);
   })();
 }
 
@@ -164,11 +182,12 @@ function filterClientDocuments(
 }
 
 export async function collectClientPdfItems(client: Client): Promise<ClientPdfItem[]> {
-  const store = await getStore();
-  const [anamnesis, acuityExams, { documents }] = await Promise.all([
-    loadAnamnesisRecords(client.id),
-    loadAcuityExams(client.id),
-    loadDocuments(),
+  const [store, pdf, anamnesis, acuityExams, { documents }] = await Promise.all([
+    getStoreSettings(),
+    getPdfRenderers(),
+    getAnamnesisRecords(client.id),
+    getAcuityExams(client.id),
+    getDocuments(),
   ]);
 
   const clientDocs = filterClientDocuments(documents, client);
@@ -178,7 +197,7 @@ export async function collectClientPdfItems(client: Client): Promise<ClientPdfIt
     filename: buildClientPdfFilename("ficha-cadastro", client.updated_at.slice(0, 10)),
     clientName: client.name,
     label: "Ficha de cadastro",
-    generate: () => renderClientRegistrationPdf(client, store),
+    generate: () => pdf.renderClientRegistrationPdf(client, store),
   });
 
   for (const record of anamnesis) {
@@ -187,7 +206,7 @@ export async function collectClientPdfItems(client: Client): Promise<ClientPdfIt
       filename: buildClientPdfFilename("anamnese", record.exam_date, suffix),
       clientName: client.name,
       label: `Anamnese (${record.exam_date})`,
-      generate: () => renderAnamnesisPdf(record, client, store),
+      generate: () => pdf.renderAnamnesisPdf(record, client, store),
     });
   }
 
@@ -202,7 +221,7 @@ export async function collectClientPdfItems(client: Client): Promise<ClientPdfIt
       filename: buildClientPdfFilename(kind, doc.exam_date, suffix),
       clientName: client.name,
       label: `${kind} (${doc.exam_date})`,
-      generate: () => renderClinicalDocumentPdf(doc),
+      generate: () => pdf.renderClinicalDocumentPdf(doc),
     });
   }
 
@@ -215,7 +234,7 @@ export async function collectClientPdfItems(client: Client): Promise<ClientPdfIt
       filename: buildClientPdfFilename("resultados-acuidade", latestDate),
       clientName: client.name,
       label: "Resultados de acuidade visual",
-      generate: () => renderAcuityResultsPdf(client.name, acuityExams, store),
+      generate: () => pdf.renderAcuityResultsPdf(client.name, acuityExams, store),
     });
   }
 
@@ -376,7 +395,7 @@ export async function syncAllClientsRetroactively(
     };
   }
 
-  const { clients } = await loadClients();
+  const { clients } = await getClients();
   let totalPdfs = 0;
   let savedPdfs = 0;
   let failedPdfs = 0;
