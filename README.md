@@ -81,7 +81,7 @@ npm run dev
 ### Prontuários optométricos (com impressão A4)
 | Documento | Status |
 |---|---|
-| Receita de Óculos e Lentes | ✅ Formulário + impressão + PDF |
+| Laudo Optométrico | ✅ Formulário + impressão + PDF |
 | Ficha Clínica | ✅ Formulário + impressão + PDF |
 | Laudo de Acuidade Visual | ✅ Formulário + impressão + PDF |
 | Declaração de Comparecimento | ✅ Formulário + impressão + PDF |

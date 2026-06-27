@@ -18,8 +18,8 @@ export interface DocumentTemplate {
 export const documentTemplates: DocumentTemplate[] = [
   {
     type: "receita_oculos",
-    name: "Receita de Óculos e Lentes",
-    description: "Prescrição oftálmica com grau para OD e OE",
+    name: "Laudo Optométrico",
+    description: "Laudo optométrico com prescrição oftálmica para OD e OE",
     icon: "Glasses",
   },
   {

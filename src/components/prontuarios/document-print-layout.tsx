@@ -5,6 +5,7 @@ interface PrintLayoutProps {
   data: DocumentFormData;
   title: string;
   children: React.ReactNode;
+  showPatientSignature?: boolean;
 }
 
 function PrintField({
@@ -28,7 +29,12 @@ function PrintField({
   );
 }
 
-export function DocumentPrintLayout({ data, title, children }: PrintLayoutProps) {
+export function DocumentPrintLayout({
+  data,
+  title,
+  children,
+  showPatientSignature = true,
+}: PrintLayoutProps) {
   return (
     <div className="document-print mx-auto max-w-[210mm] bg-white p-8 text-slate-900">
       <header className="mb-6 border-b-2 border-slate-800 pb-4">
@@ -76,7 +82,13 @@ export function DocumentPrintLayout({ data, title, children }: PrintLayoutProps)
       {children}
 
       <footer className="mt-10 border-t border-slate-300 pt-6">
-        <div className="grid grid-cols-2 gap-8">
+        <div
+          className={
+            showPatientSignature
+              ? "grid grid-cols-2 gap-8"
+              : "max-w-md"
+          }
+        >
           <div>
             <p className="text-xs text-slate-500">Profissional responsável</p>
             <p className="mt-8 border-t border-slate-400 pt-1 text-center text-sm">
@@ -86,12 +98,14 @@ export function DocumentPrintLayout({ data, title, children }: PrintLayoutProps)
               {data.register_number}
             </p>
           </div>
-          <div>
-            <p className="text-xs text-slate-500">Assinatura do paciente</p>
-            <p className="mt-8 border-t border-slate-400 pt-1 text-center text-sm">
-              {data.patient.name || "___________________________"}
-            </p>
-          </div>
+          {showPatientSignature && (
+            <div>
+              <p className="text-xs text-slate-500">Assinatura do paciente</p>
+              <p className="mt-8 border-t border-slate-400 pt-1 text-center text-sm">
+                {data.patient.name || "___________________________"}
+              </p>
+            </div>
+          )}
         </div>
         <p className="mt-6 text-center text-[10px] text-slate-400">
           Documento emitido pelo Acuidade Visual Pró — OptiCare ERP

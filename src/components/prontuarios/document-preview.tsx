@@ -27,7 +27,7 @@ export function DocumentPreview({ data }: { data: DocumentFormData }) {
 
 export function getDocumentTitle(type: DocumentType): string {
   const titles: Record<DocumentType, string> = {
-    receita_oculos: "Receita de Óculos e Lentes",
+    receita_oculos: "Laudo Optométrico",
     laudo_acuidade: "Laudo de Acuidade Visual",
     ficha_clinica: "Ficha Clínica",
     declaracao_comparecimento: "Declaração de Comparecimento",
