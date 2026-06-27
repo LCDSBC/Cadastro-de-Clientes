@@ -76,20 +76,23 @@ export interface SnellenRow {
   acuity: string;
   logMAR: string;
   letters: string;
+  /** Denominador Snellen (20/N). */
+  denominator: number;
+  /** Legado — não usado na renderização calibrada. */
   sizePercent: number;
 }
 
 export const snellenChart: SnellenRow[] = [
-  { acuity: "20/10", logMAR: "-0.3", letters: "E", sizePercent: 200 },
-  { acuity: "20/15", logMAR: "-0.2", letters: "FP", sizePercent: 133 },
-  { acuity: "20/20", logMAR: "0.0", letters: "TOZ", sizePercent: 100 },
-  { acuity: "20/25", logMAR: "0.1", letters: "LPED", sizePercent: 80 },
-  { acuity: "20/30", logMAR: "0.2", letters: "PECF", sizePercent: 67 },
-  { acuity: "20/40", logMAR: "0.3", letters: "EDFC", sizePercent: 50 },
-  { acuity: "20/50", logMAR: "0.4", letters: "DEFP", sizePercent: 40 },
-  { acuity: "20/70", logMAR: "0.5", letters: "FELO", sizePercent: 29 },
-  { acuity: "20/100", logMAR: "0.7", letters: "FEDP", sizePercent: 20 },
-  { acuity: "20/200", logMAR: "1.0", letters: "E", sizePercent: 10 },
+  { acuity: "20/10", logMAR: "-0.3", letters: "E", denominator: 10, sizePercent: 200 },
+  { acuity: "20/15", logMAR: "-0.1", letters: "FP", denominator: 15, sizePercent: 133 },
+  { acuity: "20/20", logMAR: "0.0", letters: "TOZ", denominator: 20, sizePercent: 100 },
+  { acuity: "20/25", logMAR: "0.1", letters: "LPED", denominator: 25, sizePercent: 80 },
+  { acuity: "20/30", logMAR: "0.2", letters: "PECF", denominator: 30, sizePercent: 67 },
+  { acuity: "20/40", logMAR: "0.3", letters: "EDFC", denominator: 40, sizePercent: 50 },
+  { acuity: "20/50", logMAR: "0.4", letters: "DEFP", denominator: 50, sizePercent: 40 },
+  { acuity: "20/60", logMAR: "0.5", letters: "FELZ", denominator: 60, sizePercent: 33 },
+  { acuity: "20/100", logMAR: "0.7", letters: "FEDP", denominator: 100, sizePercent: 20 },
+  { acuity: "20/200", logMAR: "1.0", letters: "E", denominator: 200, sizePercent: 10 },
 ];
 
 export interface IshiharaPlate {
@@ -112,18 +115,19 @@ export interface ETDRSRow {
   acuity: string;
   logMAR: string;
   letters: string;
+  denominator: number;
   sizePercent: number;
 }
 
 export const etdrsChart: ETDRSRow[] = [
-  { acuity: "20/20", logMAR: "0.0", letters: "D H O V", sizePercent: 100 },
-  { acuity: "20/25", logMAR: "0.1", letters: "C Z O S", sizePercent: 80 },
-  { acuity: "20/32", logMAR: "0.2", letters: "O N H R", sizePercent: 63 },
-  { acuity: "20/40", logMAR: "0.3", letters: "V C S H", sizePercent: 50 },
-  { acuity: "20/50", logMAR: "0.4", letters: "D R O C", sizePercent: 40 },
-  { acuity: "20/63", logMAR: "0.5", letters: "Z S H N", sizePercent: 32 },
-  { acuity: "20/80", logMAR: "0.6", letters: "H O D C", sizePercent: 25 },
-  { acuity: "20/100", logMAR: "0.7", letters: "S N V D", sizePercent: 20 },
+  { acuity: "20/20", logMAR: "0.0", letters: "D H O V", denominator: 20, sizePercent: 100 },
+  { acuity: "20/25", logMAR: "0.1", letters: "C Z O S", denominator: 25, sizePercent: 80 },
+  { acuity: "20/32", logMAR: "0.2", letters: "O N H R", denominator: 32, sizePercent: 63 },
+  { acuity: "20/40", logMAR: "0.3", letters: "V C S H", denominator: 40, sizePercent: 50 },
+  { acuity: "20/50", logMAR: "0.4", letters: "D R O C", denominator: 50, sizePercent: 40 },
+  { acuity: "20/63", logMAR: "0.5", letters: "Z S H N", denominator: 63, sizePercent: 32 },
+  { acuity: "20/80", logMAR: "0.6", letters: "H O D C", denominator: 80, sizePercent: 25 },
+  { acuity: "20/100", logMAR: "0.7", letters: "S N V D", denominator: 100, sizePercent: 20 },
 ];
 
 export const infantilSymbols = ["★", "●", "■", "▲", "♥", "◆", "☀", "☂"];

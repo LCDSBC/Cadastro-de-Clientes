@@ -33,6 +33,14 @@
   }
 }
 
+/* Optotipos Snellen — proporções próximas ao padrão Sloan (monoespaçado, traço uniforme) */
+.snellen-optotype {
+  font-family: ui-monospace, "Courier New", Courier, monospace;
+  font-weight: 700;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+}
+
 @media print {
   body {
     background: white !important;

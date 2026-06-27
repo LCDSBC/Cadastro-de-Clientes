@@ -20,6 +20,15 @@ import {
   type TestDistance,
   type AcuityTestType,
 } from "@/lib/acuity-visual";
+import {
+  loadSnellenCalibration,
+  previewScaleForFontSize,
+  snellenFontSizePx,
+  formatLetterSizeLabel,
+  type SnellenCalibration,
+} from "@/lib/snellen-calibration";
+import { SnellenOptotype } from "@/components/acuidade-visual/snellen-optotype";
+import { SnellenCalibrationPanel } from "@/components/acuidade-visual/snellen-calibration-panel";
 import { ACUIDADE_VISUAL_PRO } from "@/lib/acuidade-visual-pro";
 import { ProntuariosPanel } from "@/components/prontuarios/prontuarios-panel";
 import { ProfessionalSelect } from "@/components/profissionais/professional-select";
@@ -46,12 +55,15 @@ function AcuidadeVisualContent() {
 
   const [activeTab, setActiveTab] = useState<Tab>("testes");
   const [selectedTest, setSelectedTest] = useState<AcuityTestType>("snellen");
-  const [distance, setDistance] = useState<TestDistance>(3);
+  const [distance, setDistance] = useState<TestDistance>(6);
   const [currentRow, setCurrentRow] = useState(2);
   const [currentPlate, setCurrentPlate] = useState(0);
   const [eye, setEye] = useState<"OD" | "OE" | "AO">("OD");
   const [displayMode, setDisplayMode] = useState(false);
   const [glareMode, setGlareMode] = useState(false);
+  const [calibration, setCalibration] = useState<SnellenCalibration>(() =>
+    loadSnellenCalibration(),
+  );
   const [clients, setClients] = useState<Client[]>([]);
   const [clientId, setClientId] = useState(preselectedClient);
   const [professionalId, setProfessionalId] = useState("");
@@ -110,22 +122,32 @@ function AcuidadeVisualContent() {
     setSaving(false);
   };
 
-  const renderSnellenDisplay = () => {
+  const renderSnellenDisplay = (fullscreen = false) => {
     const row = snellenChart[currentRow];
+    const fontSize = snellenFontSizePx(
+      distance,
+      row.denominator,
+      calibration.pixelsPerMm,
+    );
+    const scale = fullscreen ? 1 : previewScaleForFontSize(fontSize * 1.2, 280);
+
     return (
       <div
         className={`flex min-h-[60vh] flex-col items-center justify-center bg-black transition-all ${
           glareMode ? "brightness-150" : ""
-        }`}
+        } ${fullscreen ? "min-h-screen" : ""}`}
       >
-        <div
-          className="font-bold tracking-[0.3em] text-white"
-          style={{ fontSize: `${row.sizePercent * 0.8}vmin` }}
-        >
-          {row.letters.split("").join(" ")}
-        </div>
-        <p className="mt-8 text-sm text-slate-500">
-          {row.acuity} — logMAR {row.logMAR}
+        <SnellenOptotype
+          letters={row.letters}
+          acuity={row.acuity}
+          distanceM={distance}
+          calibration={calibration}
+          scale={scale}
+          showMeta
+        />
+        <p className="mt-2 text-xs text-slate-500">
+          logMAR {row.logMAR} ·{" "}
+          {formatLetterSizeLabel(distance, row.denominator, calibration.pixelsPerMm)}
         </p>
       </div>
     );
@@ -150,34 +172,61 @@ function AcuidadeVisualContent() {
     );
   };
 
-  const renderETDRSDisplay = () => {
+  const renderETDRSDisplay = (fullscreen = false) => {
     const row = etdrsChart[currentRow] ?? etdrsChart[0];
+    const fontSize = snellenFontSizePx(
+      distance,
+      row.denominator,
+      calibration.pixelsPerMm,
+    );
+    const scale = fullscreen ? 1 : previewScaleForFontSize(fontSize * 1.2, 280);
+
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center bg-black">
-        <div
-          className="font-bold tracking-[0.5em] text-white"
-          style={{ fontSize: `${row.sizePercent * 0.7}vmin` }}
-        >
-          {row.letters}
-        </div>
-        <p className="mt-8 text-sm text-slate-500">
-          {row.acuity} — logMAR {row.logMAR}
+      <div
+        className={`flex min-h-[60vh] flex-col items-center justify-center bg-black ${
+          fullscreen ? "min-h-screen" : ""
+        }`}
+      >
+        <SnellenOptotype
+          letters={row.letters.replace(/\s+/g, "")}
+          acuity={row.acuity}
+          distanceM={distance}
+          calibration={calibration}
+          scale={scale}
+        />
+        <p className="mt-2 text-xs text-slate-500">
+          logMAR {row.logMAR} · ETDRS
         </p>
       </div>
     );
   };
 
-  const renderInfantilDisplay = () => {
+  const renderInfantilDisplay = (fullscreen = false) => {
     const row = snellenChart[Math.min(currentRow, snellenChart.length - 1)];
     const symbols = infantilSymbols.slice(0, row.letters.length);
+    const fontSize = snellenFontSizePx(
+      distance,
+      row.denominator,
+      calibration.pixelsPerMm,
+    );
+    const scale = fullscreen ? 1 : previewScaleForFontSize(fontSize * 1.2, 280);
+    const gap = fontSize * scale * 0.5;
+
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center bg-sky-100">
-        <div
-          className="flex gap-8"
-          style={{ fontSize: `${row.sizePercent * 1.2}vmin` }}
-        >
-          {symbols.map((s, i) => (
-            <span key={i}>{s}</span>
+      <div
+        className={`flex min-h-[60vh] flex-col items-center justify-center bg-sky-100 ${
+          fullscreen ? "min-h-screen" : ""
+        }`}
+      >
+        <div className="flex items-center" style={{ gap }}>
+          {symbols.map((symbol, index) => (
+            <span
+              key={index}
+              className="leading-none text-slate-900"
+              style={{ fontSize: `${fontSize * scale}px` }}
+            >
+              {symbol}
+            </span>
           ))}
         </div>
         <p className="mt-8 text-sm text-slate-600">{row.acuity}</p>
@@ -185,16 +234,16 @@ function AcuidadeVisualContent() {
     );
   };
 
-  const renderDisplay = () => {
+  const renderDisplay = (fullscreen = false) => {
     switch (selectedTest) {
       case "ishihara":
         return renderIshiharaDisplay();
       case "etdrs":
-        return renderETDRSDisplay();
+        return renderETDRSDisplay(fullscreen);
       case "infantil":
-        return renderInfantilDisplay();
+        return renderInfantilDisplay(fullscreen);
       default:
-        return renderSnellenDisplay();
+        return renderSnellenDisplay(fullscreen);
     }
   };
 
@@ -231,7 +280,13 @@ function AcuidadeVisualContent() {
             variant="outline"
             size="sm"
             className="border-white/30 bg-black/50 text-white"
-            onClick={() => setCurrentRow(Math.max(0, currentRow - 1))}
+            onClick={() => {
+              if (selectedTest === "ishihara") {
+                setCurrentPlate(Math.max(0, currentPlate - 1));
+              } else {
+                setCurrentRow(Math.max(0, currentRow - 1));
+              }
+            }}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -239,12 +294,18 @@ function AcuidadeVisualContent() {
             variant="outline"
             size="sm"
             className="border-white/30 bg-black/50 text-white"
-            onClick={() => setCurrentRow(Math.min(maxRows, currentRow + 1))}
+            onClick={() => {
+              if (selectedTest === "ishihara") {
+                setCurrentPlate(Math.min(maxRows, currentPlate + 1));
+              } else {
+                setCurrentRow(Math.min(maxRows, currentRow + 1));
+              }
+            }}
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
-        {renderDisplay()}
+        {renderDisplay(true)}
       </div>
     );
   }
@@ -428,6 +489,11 @@ function AcuidadeVisualContent() {
               </Card>
             )}
 
+            <SnellenCalibrationPanel
+              distanceM={distance}
+              onCalibrationChange={setCalibration}
+            />
+
             <Card>
               <CardHeader>
                 <CardTitle>Testes disponíveis</CardTitle>
@@ -461,14 +527,13 @@ function AcuidadeVisualContent() {
                     {testConfig.name}
                   </CardTitle>
                   <CardDescription>
-                    {testConfig.description} — {getDistanceLabel(distance)} —{" "}
-                    {eye}
+                    {testConfig.description} — {getDistanceLabel(distance)} — {eye}
                   </CardDescription>
                 </div>
-                <Badge variant="success">Calibrado HD</Badge>
+                <Badge variant="success">Calibrado · {distance} m</Badge>
               </CardHeader>
               <CardContent className="p-0">
-                {renderDisplay()}
+                {renderDisplay(false)}
                 <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50 px-4 py-3">
                   <Button
                     variant="outline"
@@ -519,6 +584,7 @@ function AcuidadeVisualContent() {
                       <tr className="border-b border-slate-200 text-left text-slate-500">
                         <th className="pb-2 pr-4">Acuidade</th>
                         <th className="pb-2 pr-4">logMAR</th>
+                        <th className="pb-2 pr-4">Altura ({distance} m)</th>
                         <th className="pb-2">Símbolos</th>
                       </tr>
                     </thead>
@@ -533,6 +599,13 @@ function AcuidadeVisualContent() {
                           >
                             <td className="py-2 pr-4">{row.acuity}</td>
                             <td className="py-2 pr-4">{row.logMAR}</td>
+                            <td className="py-2 pr-4 text-xs text-slate-500">
+                              {formatLetterSizeLabel(
+                                distance,
+                                row.denominator,
+                                calibration.pixelsPerMm,
+                              )}
+                            </td>
                             <td className="py-2 font-mono tracking-widest">
                               {row.letters}
                             </td>

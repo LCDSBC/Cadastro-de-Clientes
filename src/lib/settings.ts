@@ -30,6 +30,7 @@ export const LOCAL_STORAGE_KEYS = [
   "opticare_acuity_exams",
   "opticare_professionals",
   "opticare_client_folder_settings",
+  "opticare_snellen_calibration",
 ] as const;
 
 export const APP_VERSION = "0.1.0";
