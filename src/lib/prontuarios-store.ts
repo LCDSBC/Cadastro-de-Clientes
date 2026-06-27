@@ -6,6 +6,7 @@ import type { StoredClinicalDocument } from "./prontuarios-types";
 import { demoClinicalRecords } from "./acuidade-visual-pro";
 import { createDefaultFormData } from "./document-form";
 import { formDataToRecord } from "./prontuarios-types";
+import { queueClinicalDocumentSync } from "@/lib/client-folder-sync";
 
 const LOCAL_STORAGE_KEY = "opticare_clinical_documents";
 
@@ -125,16 +126,20 @@ export async function saveDocument(
       const { error } = await supabase.from("clinical_documents").upsert(row);
 
       if (!error) {
-        return {
+        const saved = {
           success: true,
           document: { ...normalized, synced_at: new Date().toISOString() },
-          source: "supabase",
+          source: "supabase" as const,
         };
+        queueClinicalDocumentSync(saved.document);
+        return saved;
       }
     }
   }
 
-  return { success: true, document: normalized, source: "local" };
+  const saved = { success: true, document: normalized, source: "local" as const };
+  queueClinicalDocumentSync(saved.document);
+  return saved;
 }
 
 export async function deleteDocument(id: string): Promise<void> {

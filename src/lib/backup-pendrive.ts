@@ -8,9 +8,7 @@ import {
   BACKUP_ZIP_FILENAME,
 } from "./prontuarios-types";
 import { getDocumentTitle } from "@/components/prontuarios/document-preview";
-import { createRoot } from "react-dom/client";
-import { DocumentPreview } from "@/components/prontuarios/document-preview";
-import { createElement } from "react";
+import { renderClinicalDocumentPdf } from "@/lib/client-pdf-export";
 
 function createBackupPayload(documents: StoredClinicalDocument[]): OpticareBackup {
   return {
@@ -37,46 +35,7 @@ export function downloadJsonBackup(documents: StoredClinicalDocument[]): void {
 async function renderDocumentToPdfBlob(
   doc: StoredClinicalDocument,
 ): Promise<Blob | null> {
-  const container = document.createElement("div");
-  container.style.position = "fixed";
-  container.style.left = "-9999px";
-  container.style.top = "0";
-  container.style.width = "210mm";
-  document.body.appendChild(container);
-
-  const printArea = document.createElement("div");
-  printArea.id = "temp-pdf-export";
-  container.appendChild(printArea);
-
-  const root = createRoot(printArea);
-  root.render(createElement(DocumentPreview, { data: doc.form_data }));
-
-  await new Promise((resolve) => setTimeout(resolve, 100));
-
-  try {
-    const html2canvas = (await import("html2canvas")).default;
-    const { jsPDF } = await import("jspdf");
-    const canvas = await html2canvas(printArea.firstElementChild as HTMLElement, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: "#ffffff",
-      logging: false,
-    });
-
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const imgHeight = (canvas.height * pageWidth) / canvas.width;
-    pdf.addImage(imgData, "PNG", 0, 0, pageWidth, imgHeight);
-
-    root.unmount();
-    document.body.removeChild(container);
-    return pdf.output("blob");
-  } catch {
-    root.unmount();
-    document.body.removeChild(container);
-    return null;
-  }
+  return renderClinicalDocumentPdf(doc);
 }
 
 export async function downloadZipBackup(

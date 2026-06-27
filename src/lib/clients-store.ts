@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_STORE_ID } from "@/lib/supabase/config";
 import type { Client, Prescription } from "@/lib/types";
 import { demoClients, demoPrescriptions } from "@/lib/types";
+import { queueClientRegistrationSync } from "@/lib/client-folder-sync";
 
 const LOCAL_CLIENTS_KEY = "opticare_clients";
 const LOCAL_PRESCRIPTIONS_KEY = "opticare_prescriptions";
@@ -141,10 +142,14 @@ export async function saveClient(
       };
 
       const { error } = await supabase.from("clients").upsert(row);
-      if (!error) return { client: fullClient, source: "supabase" };
+      if (!error) {
+        queueClientRegistrationSync(fullClient);
+        return { client: fullClient, source: "supabase" };
+      }
     }
   }
 
+  queueClientRegistrationSync(fullClient);
   return { client: fullClient, source: "local" };
 }
 

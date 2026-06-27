@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_STORE_ID } from "@/lib/supabase/config";
 import type { StructuredAnamnesis } from "@/lib/anamnesis";
 import { normalizeAnamnesis } from "@/lib/anamnesis";
+import { queueAnamnesisSync } from "@/lib/client-folder-sync";
 
 const LOCAL_KEY = "opticare_anamnesis_records";
 
@@ -94,10 +95,14 @@ export async function saveAnamnesisRecord(
         optometrist: full.optometrist ?? null,
         content: full,
       });
-      if (!error) return full;
+      if (!error) {
+        queueAnamnesisSync(full);
+        return full;
+      }
     }
   }
 
+  queueAnamnesisSync(full);
   return full;
 }
 
