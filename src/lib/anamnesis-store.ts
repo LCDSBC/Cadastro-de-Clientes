@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/client";
 import { DEFAULT_STORE_ID } from "@/lib/supabase/config";
 import type { StructuredAnamnesis } from "@/lib/anamnesis";
+import { normalizeAnamnesis } from "@/lib/anamnesis";
 
 const LOCAL_KEY = "opticare_anamnesis_records";
 
@@ -29,14 +30,14 @@ function saveLocal(records: StructuredAnamnesis[]): void {
 
 function mapRow(row: Record<string, unknown>): StructuredAnamnesis {
   const content = (row.content as StructuredAnamnesis) ?? ({} as StructuredAnamnesis);
-  return {
+  return normalizeAnamnesis({
     ...content,
     id: row.id as string,
     client_id: row.client_id as string,
     exam_date: (row.exam_date as string) ?? content.exam_date,
     optometrist: (row.optometrist as string) ?? content.optometrist,
     created_at: (row.created_at as string) ?? new Date().toISOString(),
-  };
+  });
 }
 
 export async function loadAnamnesisRecords(
@@ -67,12 +68,12 @@ export async function saveAnamnesisRecord(
   record: StructuredAnamnesis,
 ): Promise<StructuredAnamnesis> {
   const now = new Date().toISOString();
-  const full: StructuredAnamnesis = {
+  const full = normalizeAnamnesis({
     ...record,
     id: record.id || crypto.randomUUID(),
     updated_at: now,
     created_at: record.created_at ?? now,
-  };
+  });
 
   const locals = loadLocal();
   const idx = locals.findIndex((r) => r.id === full.id);

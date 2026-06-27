@@ -56,7 +56,7 @@ export default function AnamnesePageContent() {
     <AppShell>
       <PageHeader
         title="Anamnese estruturada"
-        description={`Ficha clínica com histórico do paciente — ${storageLabel}`}
+        description={`Ficha completa de anamnese e exames clínicos — ${storageLabel}`}
       />
 
       {loading ? (
@@ -155,6 +155,7 @@ export default function AnamnesePageContent() {
                   key={editing?.id ?? `new-${clientId}`}
                   clientId={clientId}
                   clientName={selectedClient.name}
+                  client={selectedClient}
                   initial={editing}
                   onSaved={(record) => {
                     setHistory((prev) => {

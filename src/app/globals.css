@@ -43,11 +43,14 @@
   }
 
   #document-print-area,
-  #document-print-area * {
+  #document-print-area *,
+  #anamnesis-print-area,
+  #anamnesis-print-area * {
     visibility: visible;
   }
 
-  #document-print-area {
+  #document-print-area,
+  #anamnesis-print-area {
     position: absolute;
     left: 0;
     top: 0;
