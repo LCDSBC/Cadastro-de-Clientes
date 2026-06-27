@@ -60,9 +60,11 @@ export function sanitizeFolderName(name: string): string {
 export function buildClientPdfFilename(
   kind: ClientFolderDocumentKind,
   date?: string,
+  uniqueSuffix?: string,
 ): string {
   const d = (date ?? new Date().toISOString().split("T")[0]).slice(0, 10);
-  return `${kind}-${d}.pdf`;
+  const suffix = uniqueSuffix ? `-${uniqueSuffix}` : "";
+  return `${kind}-${d}${suffix}.pdf`;
 }
 
 export function documentTypeToFolderKind(
@@ -204,13 +206,19 @@ export function isClientFolderSyncConfigured(): boolean {
   return settings.autoSyncOnSave && (!!settings.localFolderLabel || !!settings.pendriveFolderLabel);
 }
 
+export function isClientFolderLinked(): boolean {
+  const settings = loadClientFolderSettings();
+  return !!settings.localFolderLabel || !!settings.pendriveFolderLabel;
+}
+
 export async function syncPdfToClientFolders(options: {
   clientName: string;
   filename: string;
   pdfBlob: Blob;
+  force?: boolean;
 }): Promise<{ local: boolean; pendrive: boolean }> {
   const settings = loadClientFolderSettings();
-  if (!settings.autoSyncOnSave) {
+  if (!options.force && !settings.autoSyncOnSave) {
     return { local: false, pendrive: false };
   }
 

@@ -14,6 +14,7 @@ import { getStorageStatus } from "@/lib/prontuarios-store";
 import { formatCpfCnpj, formatPhone, formatDate } from "@/lib/utils";
 import { Plus, Search, User, FileText, X, Loader2 } from "lucide-react";
 import { PatientHistoryPanel } from "@/components/clientes/patient-history-panel";
+import { ClientExportButton } from "@/components/clientes/client-export-button";
 import { ProfessionalSelect } from "@/components/profissionais/professional-select";
 
 export default function ClientesPage() {
@@ -272,8 +273,9 @@ export default function ClientesPage() {
           {selectedClient ? (
             <div className="space-y-4">
               <Card>
-                <CardHeader>
+                <CardHeader className="flex flex-row items-start justify-between gap-4">
                   <CardTitle>{selectedClient.name}</CardTitle>
+                  <ClientExportButton client={selectedClient} />
                 </CardHeader>
                 <CardContent>
                   <dl className="grid gap-3 sm:grid-cols-2">

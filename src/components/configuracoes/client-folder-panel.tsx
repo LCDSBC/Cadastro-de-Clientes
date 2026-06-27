@@ -6,13 +6,15 @@ import { Button } from "@/components/ui/button";
 import {
   CLIENT_ROOT_FOLDER,
   clearFolderForStorage,
+  isClientFolderLinked,
   isFileSystemAccessSupported,
   loadClientFolderSettings,
   saveClientFolderSettings,
   pickFolderForStorage,
   type ClientFolderSettings,
 } from "@/lib/client-folder-storage";
-import { FolderOpen, HardDrive, Usb, CheckCircle2, AlertCircle } from "lucide-react";
+import { syncAllClientsRetroactively } from "@/lib/client-folder-sync";
+import { FolderOpen, HardDrive, Usb, CheckCircle2, AlertCircle, RefreshCw, Loader2 } from "lucide-react";
 
 export function ClientFolderPanel() {
   const [settings, setSettings] = useState<ClientFolderSettings>(() =>
@@ -20,7 +22,10 @@ export function ClientFolderPanel() {
   );
   const [status, setStatus] = useState<{ type: "ok" | "error"; text: string } | null>(null);
   const [loading, setLoading] = useState<"local" | "pendrive" | null>(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncProgress, setSyncProgress] = useState<string | null>(null);
   const fsSupported = isFileSystemAccessSupported();
+  const foldersLinked = isClientFolderLinked();
 
   useEffect(() => {
     setSettings(loadClientFolderSettings());
@@ -53,6 +58,28 @@ export function ClientFolderPanel() {
     const next = { ...settings, autoSyncOnSave: enabled };
     saveClientFolderSettings(next);
     setSettings(next);
+  }
+
+  async function handleRetroactiveSync() {
+    setSyncing(true);
+    setSyncProgress("Iniciando sincronização...");
+    setStatus(null);
+
+    const result = await syncAllClientsRetroactively((p) => {
+      const phase =
+        p.phase === "generating"
+          ? "Gerando"
+          : p.phase === "saving"
+            ? "Salvando"
+            : "Preparando";
+      setSyncProgress(
+        `Cliente ${p.clientIndex}/${p.clientCount}: ${p.clientName} — ${phase}${p.label ? `: ${p.label}` : ""} (${p.current}/${p.total || "?"})`,
+      );
+    });
+
+    setSyncing(false);
+    setSyncProgress(null);
+    showStatus(result.success ? "ok" : "error", result.message);
   }
 
   return (
@@ -160,6 +187,37 @@ export function ClientFolderPanel() {
                 )}
               </div>
             </div>
+          </div>
+
+          <div className="rounded-lg border border-primary-200 bg-primary-50/40 p-4">
+            <p className="mb-2 font-medium text-slate-900">Sincronizar clientes já cadastrados</p>
+            <p className="mb-4 text-sm text-slate-600">
+              Gera e grava os PDFs de todos os clientes existentes (ficha de cadastro, anamneses,
+              laudos e resultados) nas pastas configuradas. Útil para recuperar dados anteriores à
+              configuração das pastas.
+            </p>
+            {syncProgress && (
+              <p className="mb-3 flex items-center gap-2 text-sm text-primary-700">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                {syncProgress}
+              </p>
+            )}
+            <Button
+              disabled={!foldersLinked || !fsSupported || syncing}
+              onClick={() => void handleRetroactiveSync()}
+            >
+              {syncing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4" />
+              )}
+              {syncing ? "Sincronizando..." : "Sincronizar todos os clientes"}
+            </Button>
+            {!foldersLinked && (
+              <p className="mt-2 text-xs text-slate-500">
+                Configure ao menos uma pasta (computador ou pendrive) antes de sincronizar.
+              </p>
+            )}
           </div>
 
           <div className="rounded-lg bg-slate-50 p-4 text-sm text-slate-600">
