@@ -9,6 +9,7 @@ import { SupabaseSetupPanel } from "@/components/configuracoes/supabase-setup-pa
 import { SystemInfoPanel } from "@/components/configuracoes/system-info-panel";
 import { getStorageStatus } from "@/lib/prontuarios-store";
 import { UsersPanel, MultiStorePanel } from "@/components/configuracoes/users-multi-store-panels";
+import { ProfessionalsPanel } from "@/components/configuracoes/professionals-panel";
 import {
   Building2,
   Sliders,
@@ -16,11 +17,13 @@ import {
   Info,
   Users,
   Store,
+  Stethoscope,
 } from "lucide-react";
 
 const tabs = [
   { id: "loja", label: "Loja", icon: Building2 },
   { id: "preferencias", label: "Preferências", icon: Sliders },
+  { id: "profissionais", label: "Profissionais", icon: Stethoscope },
   { id: "usuarios", label: "Usuários", icon: Users },
   { id: "filiais", label: "Multi-loja", icon: Store },
   { id: "integracoes", label: "Integrações", icon: Database },
@@ -63,6 +66,7 @@ export default function ConfiguracoesPage() {
       <div className="space-y-6">
         {activeTab === "loja" && <StoreSettingsPanel />}
         {activeTab === "preferencias" && <PreferencesPanel />}
+        {activeTab === "profissionais" && <ProfessionalsPanel />}
         {activeTab === "usuarios" && <UsersPanel />}
         {activeTab === "filiais" && <MultiStorePanel />}
         {activeTab === "integracoes" && <SupabaseSetupPanel />}

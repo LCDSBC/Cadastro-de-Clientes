@@ -18,7 +18,6 @@ import {
 } from "@/lib/appointments-store";
 import { loadClients } from "@/lib/clients-store";
 import {
-  DEMO_PROFESSIONALS,
   APPOINTMENT_TYPES,
   APPOINTMENT_STATUS_LABELS,
   APPOINTMENT_STATUS_VARIANT,
@@ -36,6 +35,8 @@ import {
 import { loadPreferences } from "@/lib/settings-store";
 import { getStorageStatus } from "@/lib/prontuarios-store";
 import { formatDate, formatTime } from "@/lib/utils";
+import { ProfessionalSelect } from "@/components/profissionais/professional-select";
+import { getProfessionalByIdSync } from "@/lib/professionals-store";
 import {
   Plus,
   Search,
@@ -166,9 +167,7 @@ export default function ClinicaPage() {
       return;
     }
 
-    const professional = DEMO_PROFESSIONALS.find(
-      (p) => p.id === form.professional_id,
-    );
+    const professional = getProfessionalByIdSync(form.professional_id);
     const existing = editingId
       ? appointments.find((a) => a.id === editingId)
       : undefined;
@@ -436,19 +435,14 @@ export default function ClinicaPage() {
                   ...clients.map((c) => ({ value: c.id, label: c.name })),
                 ]}
               />
-              <Select
+              <ProfessionalSelect
                 label="Profissional"
                 value={form.professional_id}
-                onChange={(e) =>
-                  setForm({ ...form, professional_id: e.target.value })
+                allowEmpty
+                emptyLabel="Sem profissional definido"
+                onChange={(id) =>
+                  setForm({ ...form, professional_id: id })
                 }
-                options={[
-                  { value: "", label: "Sem profissional definido" },
-                  ...DEMO_PROFESSIONALS.map((p) => ({
-                    value: p.id,
-                    label: p.name,
-                  })),
-                ]}
               />
               <Select
                 label="Tipo de consulta"

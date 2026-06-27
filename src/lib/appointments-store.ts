@@ -5,9 +5,9 @@ import { DEFAULT_STORE_ID } from "@/lib/supabase/config";
 import {
   decodeAppointmentNotes,
   encodeAppointmentNotes,
-  DEMO_PROFESSIONALS,
   isToday,
 } from "@/lib/clinic";
+import { resolveProfessionalNameSync } from "@/lib/professionals-store";
 import type { Appointment, ClinicSummary } from "@/lib/types";
 import { demoAppointments } from "@/lib/types";
 
@@ -56,7 +56,7 @@ function saveLocal(appointments: Appointment[]): void {
 }
 
 function resolveProfessionalName(professionalId?: string): string | undefined {
-  return DEMO_PROFESSIONALS.find((p) => p.id === professionalId)?.name;
+  return resolveProfessionalNameSync(professionalId);
 }
 
 export function calcClinicSummary(appointments: Appointment[]): ClinicSummary {

@@ -28,6 +28,7 @@ export const LOCAL_STORAGE_KEYS = [
   "opticare_checks",
   "opticare_anamnesis_records",
   "opticare_acuity_exams",
+  "opticare_professionals",
 ] as const;
 
 export const APP_VERSION = "0.1.0";

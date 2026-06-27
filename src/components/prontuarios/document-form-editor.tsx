@@ -2,6 +2,8 @@
 
 import type { DocumentFormData } from "@/lib/document-form";
 import { Input, Select, Textarea } from "@/components/ui/input";
+import { ProfessionalSelect } from "@/components/profissionais/professional-select";
+import { professionalRegisterLabel } from "@/lib/professionals";
 
 interface DocumentFormEditorProps {
   data: DocumentFormData;
@@ -106,6 +108,22 @@ export function DocumentFormEditor({ data, onChange }: DocumentFormEditorProps) 
       <section>
         <SectionTitle>Profissional e clínica</SectionTitle>
         <div className="grid gap-3 sm:grid-cols-2">
+          <ProfessionalSelect
+            label="Profissional responsável"
+            value={data.professional_id ?? ""}
+            autoDefault={!data.optometrist}
+            className="sm:col-span-2"
+            onChange={(_, pro) =>
+              onChange({
+                ...data,
+                professional_id: pro?.id,
+                optometrist: pro?.name ?? data.optometrist,
+                register_number: pro
+                  ? professionalRegisterLabel(pro) || pro.register_number || data.register_number
+                  : data.register_number,
+              })
+            }
+          />
           <Input label="Optometrista" value={data.optometrist} onChange={(e) => onChange({ ...data, optometrist: e.target.value })} />
           <Input label="Registro profissional" value={data.register_number} onChange={(e) => onChange({ ...data, register_number: e.target.value })} />
           <Input label="Data do exame" type="date" value={data.exam_date} onChange={(e) => onChange({ ...data, exam_date: e.target.value })} />

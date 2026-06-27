@@ -24,6 +24,8 @@ import {
   RefractionFields,
 } from "./anamnesis-exam-fields";
 import { AnamnesisPrint } from "./anamnesis-print";
+import { ProfessionalSelect } from "@/components/profissionais/professional-select";
+import { professionalRegisterLabel } from "@/lib/professionals";
 import { Loader2, Printer, Save } from "lucide-react";
 
 interface AnamnesisFormProps {
@@ -133,8 +135,24 @@ export function AnamnesisForm({
                 value={form.exam_date}
                 onChange={(e) => setForm({ ...form, exam_date: e.target.value })}
               />
+              <ProfessionalSelect
+                label="Profissional responsável"
+                value={form.professional_id ?? ""}
+                autoDefault={!initial?.professional_id}
+                className="sm:col-span-2"
+                onChange={(id, pro) =>
+                  setForm({
+                    ...form,
+                    professional_id: id || undefined,
+                    optometrist: pro?.name ?? "",
+                    register_number: pro
+                      ? professionalRegisterLabel(pro) || pro.register_number
+                      : form.register_number,
+                  })
+                }
+              />
               <Input
-                label="Optometrista"
+                label="Optometrista (exibição)"
                 value={form.optometrist ?? ""}
                 onChange={(e) => setForm({ ...form, optometrist: e.target.value })}
               />

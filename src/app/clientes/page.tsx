@@ -14,6 +14,7 @@ import { getStorageStatus } from "@/lib/prontuarios-store";
 import { formatCpfCnpj, formatPhone, formatDate } from "@/lib/utils";
 import { Plus, Search, User, FileText, X, Loader2 } from "lucide-react";
 import { PatientHistoryPanel } from "@/components/clientes/patient-history-panel";
+import { ProfessionalSelect } from "@/components/profissionais/professional-select";
 
 export default function ClientesPage() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -37,6 +38,7 @@ export default function ClientesPage() {
     oe_add: "",
     dp: "",
     optometrist: "",
+    professional_id: "",
     valid_until: "",
     notes: "",
   });
@@ -123,7 +125,7 @@ export default function ClientesPage() {
       exam_date: new Date().toISOString().slice(0, 10),
       od_esf: "", od_cil: "", od_eixo: "", od_add: "",
       oe_esf: "", oe_cil: "", oe_eixo: "", oe_add: "",
-      dp: "", optometrist: "", valid_until: "", notes: "",
+      dp: "", optometrist: "", professional_id: "", valid_until: "", notes: "",
     });
     setSavingRx(false);
   };
@@ -335,6 +337,19 @@ export default function ClientesPage() {
                       <div className="grid gap-2 sm:grid-cols-2">
                         <Input label="Data do exame" type="date" required value={rxForm.exam_date} onChange={(e) => setRxForm({ ...rxForm, exam_date: e.target.value })} />
                         <Input label="Válida até" type="date" value={rxForm.valid_until} onChange={(e) => setRxForm({ ...rxForm, valid_until: e.target.value })} />
+                        <ProfessionalSelect
+                          label="Profissional"
+                          value={rxForm.professional_id}
+                          autoDefault={!rxForm.optometrist}
+                          className="sm:col-span-2"
+                          onChange={(id, pro) =>
+                            setRxForm({
+                              ...rxForm,
+                              professional_id: id,
+                              optometrist: pro?.name ?? "",
+                            })
+                          }
+                        />
                         <Input label="Optometrista" value={rxForm.optometrist} onChange={(e) => setRxForm({ ...rxForm, optometrist: e.target.value })} />
                         <Input label="DP (mm)" value={rxForm.dp} onChange={(e) => setRxForm({ ...rxForm, dp: e.target.value })} />
                       </div>

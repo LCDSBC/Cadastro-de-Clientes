@@ -35,6 +35,7 @@ export interface DocumentFormData {
   valid_until: string;
   optometrist: string;
   register_number: string;
+  professional_id?: string;
   clinic: ClinicInfo;
   patient: PatientInfo;
   refraction: RefractionData;

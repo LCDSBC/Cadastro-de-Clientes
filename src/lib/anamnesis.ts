@@ -124,6 +124,7 @@ export interface StructuredAnamnesis {
   exam_date: string;
   optometrist?: string;
   register_number?: string;
+  professional_id?: string;
   horario_entrada?: string;
   horario_saida?: string;
 

@@ -2,12 +2,6 @@ import type { Appointment } from "@/lib/types";
 
 export type { Appointment };
 
-export const DEMO_PROFESSIONALS = [
-  { id: "u1", name: "Dr. Ricardo Alves", role: "optometrista" },
-  { id: "u2", name: "Dra. Fernanda Costa", role: "optometrista" },
-  { id: "u3", name: "Dr. Paulo Mendes", role: "médico" },
-];
-
 export const APPOINTMENT_TYPES = [
   { value: "Consulta optométrica", label: "Consulta optométrica" },
   { value: "Exame de acuidade visual", label: "Exame de acuidade visual" },

@@ -22,6 +22,7 @@ import {
 } from "@/lib/acuity-visual";
 import { ACUIDADE_VISUAL_PRO } from "@/lib/acuidade-visual-pro";
 import { ProntuariosPanel } from "@/components/prontuarios/prontuarios-panel";
+import { ProfessionalSelect } from "@/components/profissionais/professional-select";
 import { loadClients } from "@/lib/clients-store";
 import { loadAcuityExams, saveAcuityExam } from "@/lib/acuity-exams-store";
 import type { AcuityExam, Client } from "@/lib/types";
@@ -53,7 +54,8 @@ function AcuidadeVisualContent() {
   const [glareMode, setGlareMode] = useState(false);
   const [clients, setClients] = useState<Client[]>([]);
   const [clientId, setClientId] = useState(preselectedClient);
-  const [performedBy, setPerformedBy] = useState("Dr. Ricardo Alves");
+  const [professionalId, setProfessionalId] = useState("");
+  const [performedBy, setPerformedBy] = useState("");
   const [examNotes, setExamNotes] = useState("");
   const [recentExams, setRecentExams] = useState<AcuityExam[]>([]);
   const [saving, setSaving] = useState(false);
@@ -354,10 +356,14 @@ function AcuidadeVisualContent() {
                     { value: "AO", label: "AO — Ambos os olhos" },
                   ]}
                 />
-                <Input
+                <ProfessionalSelect
                   label="Profissional"
-                  value={performedBy}
-                  onChange={(e) => setPerformedBy(e.target.value)}
+                  value={professionalId}
+                  autoDefault
+                  onChange={(id, pro) => {
+                    setProfessionalId(id);
+                    setPerformedBy(pro?.name ?? "");
+                  }}
                 />
                 <Input
                   label="Observações"
