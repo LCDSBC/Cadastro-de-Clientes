@@ -111,9 +111,6 @@ export function DocumentPrintLayout({
           )}
         </div>
         {showOptometricDisclaimer && <OptometricDisclaimer className="mt-6" />}
-        <p className="mt-6 text-center text-[10px] text-slate-400">
-          Documento emitido pelo Acuidade Visual Pró — OptiCare ERP
-        </p>
       </footer>
     </div>
   );

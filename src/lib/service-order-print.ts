@@ -91,7 +91,7 @@ export function printServiceOrder(
   @media print { body { margin: 10mm; } }
 </style></head><body>
   <h1>ORDEM DE SERVIÇO</h1>
-  <h2>OptiCare ERP — ${formatDate(sale.created_at)}</h2>
+  <h2>${formatDate(sale.created_at)}</h2>
   <div class="meta">
     <p><strong>Cliente:</strong> ${escapeHtml(sale.client_name)}</p>
     <p><strong>OS/Venda:</strong> #${sale.id.slice(0, 8).toUpperCase()}</p>

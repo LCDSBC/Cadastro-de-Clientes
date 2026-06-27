@@ -399,9 +399,6 @@ export function AnamnesisPrint({ record, client, store }: AnamnesisPrintProps) {
           </div>
         </div>
         <OptometricDisclaimer className="mt-6" />
-        <p className="mt-6 text-center text-[10px] text-slate-400">
-          Documento emitido pelo OptiCare ERP — Acuidade Visual Pró
-        </p>
       </footer>
     </div>
   );
