@@ -5,6 +5,7 @@ import type { StoreSettings } from "@/lib/types";
 import { formatCpfCnpj, formatDate } from "@/lib/utils";
 import { PrintField } from "@/components/prontuarios/document-print-layout";
 import { OptometricDisclaimer } from "@/components/prontuarios/optometric-disclaimer";
+import { PrintHeaderEmblem } from "@/components/prontuarios/print-header-emblem";
 
 interface AnamnesisPrintProps {
   record: StructuredAnamnesis;
@@ -52,28 +53,31 @@ export function AnamnesisPrint({ record, client, store }: AnamnesisPrintProps) {
   return (
     <div className="document-print mx-auto max-w-[210mm] bg-white p-8 text-slate-900">
       <header className="mb-6 border-b-2 border-slate-800 pb-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-lg font-bold uppercase tracking-wide">{clinicName}</h1>
-            {clinicCnpj && (
-              <p className="mt-1 text-xs text-slate-600">
-                CNPJ: {formatCpfCnpj(clinicCnpj.replace(/\D/g, "")) || clinicCnpj}
-              </p>
-            )}
-            {clinicAddress && <p className="text-xs text-slate-600">{clinicAddress}</p>}
-            {clinicPhone && (
-              <p className="text-xs text-slate-600">Tel: {clinicPhone}</p>
-            )}
-          </div>
-          <div className="text-right text-sm">
-            <p className="text-xs text-slate-500">Data do exame</p>
-            <p className="font-semibold">{formatDate(record.exam_date)}</p>
-            {record.horario_entrada && (
-              <p className="mt-1 text-xs text-slate-500">
-                Entrada: {record.horario_entrada}
-                {record.horario_saida ? ` — Saída: ${record.horario_saida}` : ""}
-              </p>
-            )}
+        <div className="flex items-start gap-4">
+          <PrintHeaderEmblem />
+          <div className="flex min-w-0 flex-1 items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h1 className="text-lg font-bold uppercase tracking-wide">{clinicName}</h1>
+              {clinicCnpj && (
+                <p className="mt-1 text-xs text-slate-600">
+                  CNPJ: {formatCpfCnpj(clinicCnpj.replace(/\D/g, "")) || clinicCnpj}
+                </p>
+              )}
+              {clinicAddress && <p className="text-xs text-slate-600">{clinicAddress}</p>}
+              {clinicPhone && (
+                <p className="text-xs text-slate-600">Tel: {clinicPhone}</p>
+              )}
+            </div>
+            <div className="shrink-0 text-right text-sm">
+              <p className="text-xs text-slate-500">Data do exame</p>
+              <p className="font-semibold">{formatDate(record.exam_date)}</p>
+              {record.horario_entrada && (
+                <p className="mt-1 text-xs text-slate-500">
+                  Entrada: {record.horario_entrada}
+                  {record.horario_saida ? ` — Saída: ${record.horario_saida}` : ""}
+                </p>
+              )}
+            </div>
           </div>
         </div>
         <h2 className="mt-4 text-center text-base font-bold uppercase tracking-wider text-slate-800">

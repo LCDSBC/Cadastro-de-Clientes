@@ -1,6 +1,7 @@
 import type { DocumentFormData } from "@/lib/document-form";
 import { formatCpfCnpj, formatDate } from "@/lib/utils";
 import { OptometricDisclaimer } from "./optometric-disclaimer";
+import { PrintHeaderEmblem } from "./print-header-emblem";
 
 interface PrintLayoutProps {
   data: DocumentFormData;
@@ -41,22 +42,25 @@ export function DocumentPrintLayout({
   return (
     <div className="document-print mx-auto max-w-[210mm] bg-white p-8 text-slate-900">
       <header className="mb-6 border-b-2 border-slate-800 pb-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-lg font-bold uppercase tracking-wide">
-              {data.clinic.name}
-            </h1>
-            <p className="mt-1 text-xs text-slate-600">
-              CNPJ: {formatCpfCnpj(data.clinic.cnpj.replace(/\D/g, "")) || data.clinic.cnpj}
-            </p>
-            <p className="text-xs text-slate-600">{data.clinic.address}</p>
-            <p className="text-xs text-slate-600">
-              {data.clinic.city}/{data.clinic.state} — Tel: {data.clinic.phone}
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-xs text-slate-500">Data do exame</p>
-            <p className="font-semibold">{formatDate(data.exam_date)}</p>
+        <div className="flex items-start gap-4">
+          <PrintHeaderEmblem />
+          <div className="flex min-w-0 flex-1 items-start justify-between gap-4">
+            <div className="min-w-0">
+              <h1 className="text-lg font-bold uppercase tracking-wide">
+                {data.clinic.name}
+              </h1>
+              <p className="mt-1 text-xs text-slate-600">
+                CNPJ: {formatCpfCnpj(data.clinic.cnpj.replace(/\D/g, "")) || data.clinic.cnpj}
+              </p>
+              <p className="text-xs text-slate-600">{data.clinic.address}</p>
+              <p className="text-xs text-slate-600">
+                {data.clinic.city}/{data.clinic.state} — Tel: {data.clinic.phone}
+              </p>
+            </div>
+            <div className="shrink-0 text-right">
+              <p className="text-xs text-slate-500">Data do exame</p>
+              <p className="font-semibold">{formatDate(data.exam_date)}</p>
+            </div>
           </div>
         </div>
         <h2 className="mt-4 text-center text-base font-bold uppercase tracking-wider text-slate-800">
