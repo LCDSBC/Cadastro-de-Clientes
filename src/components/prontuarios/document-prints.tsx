@@ -5,7 +5,12 @@ import { formatCpfCnpj, formatDate } from "@/lib/utils";
 
 export function ReceitaOculosPrint({ data }: { data: DocumentFormData }) {
   return (
-    <DocumentPrintLayout data={data} title="Laudo Optométrico" showPatientSignature={false}>
+    <DocumentPrintLayout
+      data={data}
+      title="Laudo Optométrico"
+      showPatientSignature={false}
+      showOptometricDisclaimer
+    >
       <section className="mb-6">
         <h3 className="mb-3 text-sm font-bold uppercase text-slate-700">
           Prescrição Oftálmica
@@ -81,7 +86,12 @@ export function ReceitaOculosPrint({ data }: { data: DocumentFormData }) {
 
 export function LaudoAcuidadePrint({ data }: { data: DocumentFormData }) {
   return (
-    <DocumentPrintLayout data={data} title="Laudo de Acuidade Visual" showPatientSignature={false}>
+    <DocumentPrintLayout
+      data={data}
+      title="Laudo de Acuidade Visual"
+      showPatientSignature={false}
+      showOptometricDisclaimer
+    >
       <section className="mb-6">
         <h3 className="mb-3 text-sm font-bold uppercase text-slate-700">
           Resultados do Exame
@@ -157,7 +167,12 @@ export function LaudoAcuidadePrint({ data }: { data: DocumentFormData }) {
 
 export function FichaClinicaPrint({ data }: { data: DocumentFormData }) {
   return (
-    <DocumentPrintLayout data={data} title="Ficha Clínica Optométrica" showPatientSignature={false}>
+    <DocumentPrintLayout
+      data={data}
+      title="Ficha Clínica Optométrica"
+      showPatientSignature={false}
+      showOptometricDisclaimer
+    >
       <section className="mb-4 space-y-4">
         <PrintField label="Queixa principal" value={data.queixa_principal} />
         <PrintField label="Anamnese" value={data.anamnese} />

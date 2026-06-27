@@ -1,11 +1,13 @@
 import type { DocumentFormData } from "@/lib/document-form";
 import { formatCpfCnpj, formatDate } from "@/lib/utils";
+import { OptometricDisclaimer } from "./optometric-disclaimer";
 
 interface PrintLayoutProps {
   data: DocumentFormData;
   title: string;
   children: React.ReactNode;
   showPatientSignature?: boolean;
+  showOptometricDisclaimer?: boolean;
 }
 
 function PrintField({
@@ -34,6 +36,7 @@ export function DocumentPrintLayout({
   title,
   children,
   showPatientSignature = true,
+  showOptometricDisclaimer = false,
 }: PrintLayoutProps) {
   return (
     <div className="document-print mx-auto max-w-[210mm] bg-white p-8 text-slate-900">
@@ -107,6 +110,7 @@ export function DocumentPrintLayout({
             </div>
           )}
         </div>
+        {showOptometricDisclaimer && <OptometricDisclaimer className="mt-6" />}
         <p className="mt-6 text-center text-[10px] text-slate-400">
           Documento emitido pelo Acuidade Visual Pró — OptiCare ERP
         </p>

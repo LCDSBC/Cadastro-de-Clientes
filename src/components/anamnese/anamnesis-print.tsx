@@ -4,6 +4,7 @@ import type { Client } from "@/lib/types";
 import type { StoreSettings } from "@/lib/types";
 import { formatCpfCnpj, formatDate } from "@/lib/utils";
 import { PrintField } from "@/components/prontuarios/document-print-layout";
+import { OptometricDisclaimer } from "@/components/prontuarios/optometric-disclaimer";
 
 interface AnamnesisPrintProps {
   record: StructuredAnamnesis;
@@ -397,6 +398,7 @@ export function AnamnesisPrint({ record, client, store }: AnamnesisPrintProps) {
             </p>
           </div>
         </div>
+        <OptometricDisclaimer className="mt-6" />
         <p className="mt-6 text-center text-[10px] text-slate-400">
           Documento emitido pelo OptiCare ERP — Acuidade Visual Pró
         </p>
