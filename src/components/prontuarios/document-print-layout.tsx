@@ -45,7 +45,7 @@ export function DocumentPrintLayout({
       <header className="mb-6 border-b-2 border-slate-800 pb-4">
         <div className="flex items-start gap-4">
           <PrintHeaderEmblem />
-          <div className="flex min-w-0 flex-1 items-start justify-between gap-4">
+          <div className="flex min-w-0 flex-1 items-start gap-4">
             <div className="min-w-0">
               <h1 className="text-lg font-bold uppercase tracking-wide">
                 {data.clinic.name}
@@ -57,10 +57,6 @@ export function DocumentPrintLayout({
               <p className="text-xs text-slate-600">
                 {data.clinic.city}/{data.clinic.state} — Tel: {data.clinic.phone}
               </p>
-            </div>
-            <div className="shrink-0 text-right">
-              <p className="text-xs text-slate-500">Data do exame</p>
-              <p className="font-semibold">{formatDate(data.exam_date)}</p>
             </div>
           </div>
         </div>
@@ -91,11 +87,9 @@ export function DocumentPrintLayout({
 
       <footer className="mt-10 border-t border-slate-300 pt-6">
         <div
-          className={
-            showPatientSignature
-              ? "grid grid-cols-2 gap-8"
-              : "max-w-md"
-          }
+          className={`grid gap-8 ${
+            showPatientSignature ? "grid-cols-3" : "grid-cols-2 max-w-2xl"
+          }`}
         >
           <div>
             <p className="text-xs text-slate-500">Profissional responsável</p>
@@ -104,6 +98,12 @@ export function DocumentPrintLayout({
             </p>
             <p className="text-center text-xs text-slate-500">
               {data.register_number}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs text-slate-500">Data do exame</p>
+            <p className="mt-8 border-t border-slate-400 pt-1 text-center text-sm font-semibold">
+              {formatDate(data.exam_date)}
             </p>
           </div>
           {showPatientSignature && (
