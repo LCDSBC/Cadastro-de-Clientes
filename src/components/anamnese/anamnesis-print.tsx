@@ -1,5 +1,5 @@
 import type { StructuredAnamnesis } from "@/lib/anamnesis";
-import { formatRefractionShort } from "@/lib/anamnesis";
+import { formatRefractionShort, normalizeAnamnesis } from "@/lib/anamnesis";
 import type { Client } from "@/lib/types";
 import type { StoreSettings } from "@/lib/types";
 import { formatCpfCnpj, formatDate } from "@/lib/utils";
@@ -43,7 +43,8 @@ function BoolLabel({ value, yes = "Sim", no = "Não" }: { value?: boolean; yes?:
 }
 
 export function AnamnesisPrint({ record, client, store }: AnamnesisPrintProps) {
-  const ex = record.exames;
+  const normalized = normalizeAnamnesis(record);
+  const ex = normalized.exames;
   const clinicName = store?.name ?? "Ótica OptiCare";
   const clinicCnpj = store?.cnpj ?? "";
   const clinicPhone = store?.phone ?? "";
@@ -75,7 +76,7 @@ export function AnamnesisPrint({ record, client, store }: AnamnesisPrintProps) {
       <section className="mb-6 grid grid-cols-2 gap-3 rounded border border-slate-200 p-4">
         <PrintField
           label="Paciente"
-          value={client?.name ?? record.client_name}
+          value={client?.name ?? normalized.client_name ?? record.client_name}
           className="col-span-2"
         />
         <PrintField

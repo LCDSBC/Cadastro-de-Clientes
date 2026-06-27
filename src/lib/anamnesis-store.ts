@@ -19,7 +19,8 @@ function loadLocal(): StructuredAnamnesis[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(LOCAL_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    return (JSON.parse(raw) as StructuredAnamnesis[]).map((r) => normalizeAnamnesis(r));
   } catch {
     return [];
   }

@@ -4,6 +4,7 @@ import { createElement } from "react";
 import { createRoot } from "react-dom/client";
 import type { Client, StoreSettings } from "@/lib/types";
 import type { StructuredAnamnesis } from "@/lib/anamnesis";
+import { normalizeAnamnesis } from "@/lib/anamnesis";
 import type { AcuityExam } from "@/lib/types";
 import type { StoredClinicalDocument } from "./prontuarios-types";
 import { renderReactComponentToPdfBlob } from "./pdf-render";
@@ -40,7 +41,13 @@ export async function renderAnamnesisPdf(
 ): Promise<Blob | null> {
   return renderReactComponentToPdfBlob((container) => {
     const root = createRoot(container);
-    root.render(createElement(AnamnesisPrint, { record, client, store }));
+    root.render(
+      createElement(AnamnesisPrint, {
+        record: normalizeAnamnesis(record),
+        client,
+        store,
+      }),
+    );
     return { unmount: () => root.unmount() };
   });
 }
