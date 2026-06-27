@@ -26,20 +26,20 @@ export function PrintClinicHeader({
     .join(" — ");
 
   return (
-    <div className="flex justify-center">
-      <div className="flex items-center gap-5 text-left">
-        <PrintHeaderEmblem />
-        <div className="min-w-0">
-          <h1 className="text-lg font-bold uppercase tracking-wide">{name}</h1>
-          {cnpj && (
-            <p className="mt-1 text-xs text-slate-600">
-              CNPJ: {formatCpfCnpj(cnpj.replace(/\D/g, "")) || cnpj}
-            </p>
-          )}
-          {address && <p className="text-xs text-slate-600">{address}</p>}
-          {contactLine && <p className="text-xs text-slate-600">{contactLine}</p>}
-          {extra}
-        </div>
+    <div className="flex items-start gap-6 text-left">
+      <PrintHeaderEmblem className="-ml-6 shrink-0" />
+      <div className="min-w-0 flex-1 pt-1">
+        <h1 className="text-2xl font-bold italic uppercase tracking-wide text-slate-900">
+          {name}
+        </h1>
+        {cnpj && (
+          <p className="mt-1 text-xs text-slate-600">
+            CNPJ: {formatCpfCnpj(cnpj.replace(/\D/g, "")) || cnpj}
+          </p>
+        )}
+        {address && <p className="text-xs text-slate-600">{address}</p>}
+        {contactLine && <p className="text-xs text-slate-600">{contactLine}</p>}
+        {extra}
       </div>
     </div>
   );
